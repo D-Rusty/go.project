@@ -10,3 +10,4 @@ src/github.com/**
 .idea/workspace.xml
 bin/
 pkg/
+.idea/**
