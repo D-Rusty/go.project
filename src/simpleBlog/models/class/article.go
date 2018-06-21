@@ -88,7 +88,6 @@ func (a Article) Delete() (err error) {
 
 func (a Article) Gets() (rets []Article) {
 	o := orm.NewOrm()
-	//o.QueryTable("article").Filter("Author", a.Author).Filter("defunct", 0).All(&ret)
 
 	qs := o.QueryTable("article")
 
