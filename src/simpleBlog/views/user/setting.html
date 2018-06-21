@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>设置中心</title>
+
+{{template "head.html" .}}
+</head>
+<body>
+
+{{template "header.html" .}}
+
+<div id="wrap">
+    <div class="container">
+
+        <div class="col-md-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" class="active">
+                    <a href="#userinfo" role="tab" data-toggle="tab">基本信息</a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#avator" role="tab" data-toggle="tab">头像设置</a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#account" role="tab" data-toggle="tab">帐号设置</a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#userinfo" role="tab" data-toggle="tab"></a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-md-7">
+            <div class="tab-content">
+                <div role="tapanel" class="tab-pane active" id="userinfo">
+                    <h2>基本信息</h2>
+                    <hr>
+                    <form action="/setting" method="post">
+                        <input type="hidden" name="do" value="info">
+                        <div class="form-group">
+                            <label>User</label>
+                            <input class="form-control" value="{{.user.Id}}"  readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Nick</label>
+                            <input class="form-control" name="nick" value="{{.user.Nick}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" name="email" value="{{.user.Email}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input class="form-control" name="url" value="{{.user.Url}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Hobby</label>
+                            <input class="form-control" name="hobby" value="{{.user.Hobby}}">
+                        </div>
+                        <input type="submit" class="btn btn-default">
+                    </form>
+                </div>
+                <div role="tapanel" class="tab-pane" id="account">
+                    <h2>帐号设置</h2>
+                    <hr>
+                    <form action="/setting" method="post">
+                        <input type="hidden" name="do" value="chpwd">
+                        <div class="form-group">
+                            <label>User</label>
+                            <input class="form-control" value="{{.user.Id}}"  readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Old Password</label>
+                            <input class="form-control" name="pwd1" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input class="form-control" name="pwd2" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm</label>
+                            <input class="form-control" name="pwd3" value="">
+                        </div>
+                        <input type="submit" class="btn btn-default">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+            <h2>Login</h2>
+            <div class="well">
+                <form action="/login" method="post">
+                    <div class="form-group">
+                        <label>User</label>
+                        <input class="form-control" name="userid">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" name="password" type="password">
+                    </div>
+                    <input type="submit" class="btn btn-default">
+
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h2>Register</h2>
+            <div class="well">
+                <form action="/register" method="post">
+                    <div class="form-group">
+                        <label>User</label>
+                        <input class="form-control" name="userid">
+                    </div>
+                    <div class="form-group">
+                        <label>Nick</label>
+                        <input class="form-control" name="nick">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" name="password" type="password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm</label>
+                        <input class="form-control" name="password2" type="password">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" name="email" type="email">
+                    </div>
+                    <input type="submit" class="btn btn-default">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- {{.user}}
+
+	<form action="/register" method="post">
+		<input name="userid" value="geek"/>
+		<input name="nick" />
+		<input name="password" type="password"/>
+		<input name="password2"type="password"/>
+		<input name="email">
+		<input type="submit">
+	</form>
+
+	<form action="/login" method="post">
+		Id:<input name="userid">
+		<br>
+		Password:<input name="password" type="password">
+		<br>
+		<input type="submit">
+	</form> -->
+
+<script type="text/javascript">
+    $('form').bind('submit', function(){
+        var tmp = ajaxSubmit(this, function(){
+            if ( tmp.responseJSON.success == true ){
+                alert("成功")
+                location.reload()
+            }else{
+                alert(tmp.responseJSON.content)
+            }
+        })
+        return false;
+    })
+</script>
+
+</body>
+</html>

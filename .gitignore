@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+pkg
+src/github.com/**
+.idea/go.project.iml
+.idea/inspectionProfiles/
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+bin/
+pkg/
