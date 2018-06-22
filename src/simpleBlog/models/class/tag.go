@@ -29,7 +29,7 @@ func (t Tag) GetOrNew() *Tag {
 	return &t
 }
 
-var bscolor []string = []string{"success", "primary", "daanger", "warning"}
+var bscolor = []string{"success", "primary", "daanger", "warning"}
 
 func (t Tag) RandColor() string {
 	return bscolor[modules.RandInt(4)]

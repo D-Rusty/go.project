@@ -12,7 +12,7 @@ func init() {
 	//用户登录
 	beego.Router("/login", &controllers.UserController{}, `post:Login`)
 	//用户注册
-	beego.Router("/register", &controllers.UserController{}, `post:Register`)
+	beego.Router("/register", &controllers.UserController{}, `get:RegisterPage;post:Register`)
 	//退出登录
 	beego.Router("/logout", &controllers.UserController{}, `get:Logout`)
 	//用户信息设置

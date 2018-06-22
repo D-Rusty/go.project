@@ -12,3 +12,7 @@ nav.navbox a {
 nav.navbox a:hover, nav.navbox a.active {
     background: #eee;
 }
+
+.circle--square{
+    border-radius:50%;
+}

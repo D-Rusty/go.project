@@ -13,7 +13,7 @@ import (
 
 type UserController struct {
 	BaseController
-	RET
+	ret RET
 }
 
 /**
@@ -23,7 +23,7 @@ func (c *UserController) Profile() {
 
 	//获取来自页面的用户id
 	id := c.Ctx.Input.Param(":id")
-	u := &class.User{Id: id}
+	u := &class.User{UId: id}
 	//通过数据库查询该用户信息
 	u.ReadDB()
 	//将查询到的用户信息，存储到map中
@@ -45,6 +45,104 @@ func (c *UserController) Profile() {
  */
 func (c *UserController) UnLoginHomePage() {
 	c.TplName = "user/homepage.html"
+}
+
+/**
+ * 注册页面
+ */
+func (c *UserController) RegisterPage() {
+	c.TplName = "user/register.html"
+}
+
+/**
+ * 用户注册
+ */
+func (c *UserController) Register() {
+
+	defer func() {
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	}()
+
+	username := c.GetString("username")
+	nick := c.GetString("nick")
+	logoImgUrl := c.GetString("logoImgUrl")
+	describe := c.GetString("describe")
+	hobby := c.GetString("hobby")
+	email := c.GetString("email")
+	pwd1 := c.GetString("password")
+	pwd2 := c.GetString("password2")
+
+	valid := validation.Validation{}
+
+	valid.Required(username, "Username")
+	valid.Required(nick, "Nick")
+
+	//验证是否传入以下参数
+	valid.Required(pwd1, "Password")
+	valid.Required(pwd2, "Password2")
+
+	//验证别名长度
+	valid.MaxSize(nick, 30, "Nick")
+	valid.MinSize(nick, 3, "Nick")
+
+	valid.MaxSize(username, 30, "Username")
+	valid.MinSize(username, 3, "Username")
+
+	valid.MaxSize(pwd1, 30, "password")
+	valid.MinSize(pwd1, 3, "password")
+
+	valid.MaxSize(pwd2, 10, "password2")
+	valid.MinSize(pwd2, 6, "password2")
+
+	//验证email格式是否正确
+	valid.Email(email, "Email")
+
+	switch {
+
+	case valid.HasErrors():
+
+	case pwd1 != pwd2:
+		valid.Error("两次密码不一致")
+
+	default:
+		u := &class.User{
+			UId:        generateRandomUserId(),
+			UserName:   username,
+			Nick:       nick,
+			LogoImgUrl: logoImgUrl,
+			Describe:   describe,
+			Hobby:      hobby,
+			Email:      email,
+			Password:   PwGen(pwd1),
+			PostNum:    0,
+			TagNum:     0,
+			RegTime:    time.Now(),
+		}
+		switch {
+		case u.ExistId():
+			valid.Error("用户名被占用")
+		case u.ExistEmail():
+			valid.Error("邮箱被占用")
+		default:
+			err := u.CreateDB()
+			if err == nil {
+				c.ret.Ok = true
+				c.ret.Content = "注册成功"
+				return
+			} else {
+				valid.Error(fmt.Sprintf("%v", err))
+			}
+
+		}
+
+	}
+
+	c.ret.Ok = false
+
+	c.ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
+
+	return
 }
 
 /**
@@ -72,84 +170,6 @@ func (c *UserController) Setting() {
 }
 
 /**
- * 用户注册
- */
-func (c *UserController) Register() {
-
-	ret := RET{
-		Ok:      true,
-		Content: "success",
-	}
-
-	defer func() {
-		c.Data["json"] = ret
-		c.ServeJSON()
-	}()
-
-	id := c.GetString("userid")
-	nick := c.GetString("nick")
-	pwd1 := c.GetString("password")
-	pwd2 := c.GetString("password2")
-	email := c.GetString("email")
-
-	//当昵称长度小于1时 昵称=用户id
-	if len(nick) < 1 {
-		nick = id
-	}
-
-	valid := validation.Validation{}
-
-	//验证email格式是否正确
-	valid.Email(email, "Email")
-
-	//验证是否传入以下参数
-	valid.Required(id, "Userid")
-	valid.Required(pwd1, "Password")
-	valid.Required(pwd2, "Password2")
-
-	//验证UserId,nick长度
-	valid.MaxSize(id, 20, "UserID")
-	valid.MaxSize(nick, 30, "Nick")
-
-	switch {
-
-	case valid.HasErrors():
-
-	case pwd1 != pwd2:
-		valid.Error("两次密码不一致")
-
-	default:
-		u := &class.User{
-			Id:       id,
-			Email:    email,
-			Nick:     nick,
-			Password: PwGen(pwd1),
-			Regtime:  time.Now(),
-			Private:  class.DefaultPvt,
-		}
-		switch {
-		case u.ExistId():
-			valid.Error("用户名被占用")
-		case u.ExistEmail():
-			valid.Error("邮箱被占用")
-		default:
-			err := u.CreateDB()
-			if err == nil {
-				return
-			}
-			valid.Error(fmt.Sprintf("%v", err))
-		}
-
-	}
-
-	ret.Ok = false
-
-	ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
-
-	return
-}
-
-/**
  * 用户登录
  */
 func (c *UserController) Login() {
@@ -172,7 +192,7 @@ func (c *UserController) Login() {
 	valid.Required(id, "UserId")
 	valid.Required(pwd, "Password")
 
-	u := &class.User{Id: id}
+	u := &class.User{UId: id}
 
 	switch {
 	case valid.HasErrors():
@@ -206,22 +226,21 @@ func (c *UserController) SettingInfo() {
 	user := c.GetSession("user").(class.User)
 	user.Nick = c.GetString("nick")
 	user.Email = c.GetString("email")
-	user.Url = c.GetString("url")
 	user.Hobby = c.GetString("hobby")
 	err := user.Update()
 
 	if err == nil {
 		c.DoLogin(user)
-		c.RET.Ok = true
-		c.RET.Content = "用户信息设置成功"
+		c.ret.Ok = true
+		c.ret.Content = "用户信息设置成功"
 	} else {
-		c.RET.Ok = false
-		c.RET.Content = "用户信息设置失败"
+		c.ret.Ok = false
+		c.ret.Content = "用户信息设置失败"
 	}
 
 	defer func() {
 
-		c.Data["json"] = c.RET
+		c.Data["json"] = c.ret
 
 		c.ServeJSON()
 	}()
@@ -236,24 +255,24 @@ func (c *UserController) SettingPwd() {
 	user := c.GetSession("user").(class.User)
 
 	if PwCheck(c.GetString("pwd1"), user.Password) == false {
-		c.RET.Ok = false
-		c.RET.Content = "密码输入错误"
+		c.ret.Ok = false
+		c.ret.Content = "密码输入错误"
 	} else {
 		err := user.Update()
 
 		c.DoLogin(user)
 
 		if err == nil {
-			c.RET.Ok = true
-			c.RET.Content = "密码设置成功"
+			c.ret.Ok = true
+			c.ret.Content = "密码设置成功"
 		} else {
-			c.RET.Ok = false
-			c.RET.Content = "密码设置失败"
+			c.ret.Ok = false
+			c.ret.Content = "密码设置失败"
 		}
 	}
 
 	defer func() {
-		c.Data["json"] = c.RET
+		c.Data["json"] = c.ret
 		c.ServeJSON()
 	}()
 
@@ -312,4 +331,12 @@ func Base64Encode(s string) string {
 func Base64Decode(s string) string {
 	res, _ := base64.StdEncoding.DecodeString(s)
 	return string(res)
+}
+
+/*
+ * 生成随机用户id
+ */
+
+func generateRandomUserId() string {
+	return strconv.FormatInt(time.Now().UnixNano()%9000+1000, 10)
 }

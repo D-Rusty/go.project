@@ -78,14 +78,14 @@ func (c *ArticleController) DelArticle() {
 	a := &class.Article{Id: id}
 	a.ReadDB()
 
-	if u.Id != a.Author.Id {
+	if u.UId != a.Author.UId {
 		c.DoLogout()
 	}
 
 	a.Defunct = true
 	a.Update()
 
-	c.Redirect("/user/"+a.Author.Id, 302)
+	c.Redirect("/user/"+a.Author.UId, 302)
 }
 
 /**
@@ -112,7 +112,7 @@ func (c *ArticleController) SubmitEditArticle() {
 	a := &class.Article{Id: id}
 	a.ReadDB()
 
-	if u.Id != a.Author.Id {
+	if u.UId != a.Author.UId {
 		c.DoLogout()
 	}
 
@@ -156,7 +156,7 @@ func (c *ArticleController) Archive() {
 
 	//获取文章的坐着信息
 	if len(c.GetString("author")) > 0 {
-		author := class.User{Id: c.GetString("author")}.Get()
+		author := class.User{UId: c.GetString("author")}.Get()
 		if author == nil {
 			errmsg += fmt.Sprintf("User[%s] is not exist.\n", c.GetString("author"))
 		} else {

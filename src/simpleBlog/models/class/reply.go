@@ -31,7 +31,7 @@ func (a Reply) Gets() (rets [] *Reply) {
 		qs = qs.Filter("article_id", a.Article.Id)
 	}
 	if a.Author != nil {
-		qs = qs.Filter("author_id", a.Author.Id)
+		qs = qs.Filter("author_id", a.Author.UId)
 	}
 
 	qs = qs.Filter("defunct", 0)

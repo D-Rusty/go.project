@@ -6,24 +6,17 @@ import (
 )
 
 type User struct {
-	Id     string `orm:"pk"`
-	Nick   string
-	Info   string `orm:"null"`
-	Hobby  string `orm:"null"`
-	Email  string `orm:"unique"`
-	Avator string `orm:"null"`
-	Url    string `orm:"null"`
-
-	Posts int
-
-	Followers int
-	Following int
-
-	Regtime time.Time `orm:"auto_now_add"`
-
-	Password string
-
-	Private int
+	UId        string    `orm:"pk;"`          //id 自动增长
+	UserName   string                         //用户名
+	Nick       string                         //别名
+	LogoImgUrl string                         //个人头像
+	Describe   string                         //个人描述
+	Hobby      string    `orm:"null"`         //兴趣爱好
+	Email      string    `orm:"unique"`       //邮箱地址
+	Password   string                         //登录密码
+	PostNum    int                            //文章数量
+	TagNum     int                            //标签数量
+	RegTime    time.Time `orm:"auto_now_add"` //用户注册时间
 }
 
 const (
@@ -55,7 +48,6 @@ func (u User) Update() (err error) {
 }
 
 func (u User) Delete() (err error) {
-	u.Private &= ^1
 	err = u.Update()
 	return
 }
