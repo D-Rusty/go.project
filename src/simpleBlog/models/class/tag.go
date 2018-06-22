@@ -11,6 +11,9 @@ type Tag struct {
 	Articles []*Article `orm:"reverse(many)"`
 }
 
+/**
+ * 查询tag
+ */
 func (t Tag) Get() *Tag {
 	o := orm.NewOrm()
 	o.QueryTable("tag").Filter("Name", t.Name).One(&t)

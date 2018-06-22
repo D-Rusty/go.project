@@ -67,7 +67,7 @@
         {{template "replybox" .replyTree}}
 
             <div>
-                <form action="/reply/new" method="post">
+                <form action="/create/reply" method="post">
                     <textarea name="content" class="form-control"></textarea>
                     <input type="hidden" name="article_id" value="{{.article.Id}}">
                     <input type="hidden" name="parent_id">

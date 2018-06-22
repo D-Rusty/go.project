@@ -24,7 +24,7 @@ func (a *Reply) Create() (n int64, err error) {
 	return
 }
 
-func (a Reply) Gets() (rets[] *Reply) {
+func (a Reply) Gets() (rets [] *Reply) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("reply")
 	if a.Article != nil {
@@ -46,6 +46,9 @@ func (a Reply) Gets() (rets[] *Reply) {
 	return
 }
 
+/***
+ * 评论树
+ */
 type ReplyTree struct {
 	*Reply
 	Childs []*ReplyTree

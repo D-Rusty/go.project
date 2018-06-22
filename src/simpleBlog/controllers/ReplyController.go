@@ -12,15 +12,17 @@ type ReplyController struct {
 	RET
 }
 
-func (c *ReplyController) New() {
+func (c *ReplyController) CreateReply() {
 
 	c.CheckLogin()
+
 	user := c.GetSession("user").(class.User)
 
 	defer func() {
 		c.Data["json"] = c.RET
 		c.ServeJSON()
 	}()
+
 
 	article_id, _ := c.GetInt("article_id")
 

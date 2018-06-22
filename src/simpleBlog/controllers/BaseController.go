@@ -46,7 +46,7 @@ func (c *BaseController) IsLogin() bool {
 }
 
 /**
- * 检查用户是否已经登录，如果没有登录，将页面重定向到未登录的首页(unloginhomepage.html)
+ * 检查用户是否已经登录，如果没有登录，将页面重定向到未登录的首页(homepage.html)
  */
 func (c *BaseController) CheckLogin() {
 	if !c.IsLogin() {

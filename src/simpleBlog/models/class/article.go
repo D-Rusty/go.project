@@ -50,8 +50,6 @@ func (a Article) Update() (err error) {
 	}
 
 	m2m := o.QueryM2M(&a, "Tags")
-	//m2m.Clear()
-	//m2m.Add(a.Tags)
 	old := Article{Id: a.Id}
 	_, _ = o.LoadRelated(&old, "Tags")
 

@@ -9,49 +9,21 @@ import (
 
 type ArticleController struct {
 	BaseController
-
 	ret RET
 }
 
-func (c *ArticleController) PageNew() {
+/**
+ * 创建文章页面
+ */
+func (c *ArticleController) OnCreateArticlePage() {
 	c.CheckLogin()
-	c.TplName = "article/new.html"
+	c.TplName = "article/create.html"
 }
 
-func (c *ArticleController) Archive() {
-	errmsg := ""
-	a := class.Article{}
-
-	if len(c.GetString("tag")) > 0 {
-		tag := class.Tag{Name: c.GetString("tag")}.Get()
-		if tag == nil {
-			errmsg += fmt.Sprintf("Tag[%s] is not exist.\n", c.GetString("tag"))
-		} else {
-			a.Tags = []*class.Tag{tag}
-		}
-	}
-
-	if len(c.GetString("author")) > 0 {
-		author := class.User{Id: c.GetString("author")}.Get()
-		if author == nil {
-			errmsg += fmt.Sprintf("User[%s] is not exist.\n", c.GetString("author"))
-		} else {
-			a.Author = author
-		}
-	}
-
-	if len(errmsg) == 0 {
-		rets := a.Gets()
-		c.Data["articles"] = rets
-	}
-
-	c.Data["err"] = errmsg
-
-	c.TplName = "article/archive.html"
-
-}
-
-func (c *ArticleController) New() {
+/**
+ * 提交新写好的文章到服务器
+ */
+func (c *ArticleController) PostNewArtic() {
 
 	c.CheckLogin()
 
@@ -63,6 +35,7 @@ func (c *ArticleController) New() {
 		Author:  &u,
 	}
 
+	//将新写好的文章插入数据库
 	n, err := a.Create()
 
 	if err == nil {
@@ -73,13 +46,16 @@ func (c *ArticleController) New() {
 		return
 	}
 
+	c.ret.Ok = false
 	c.ret.Content = fmt.Sprint(err)
-
 	c.Data["json"] = c.ret
 	c.ServeJSON()
 }
 
-func (c *ArticleController) Get() {
+/**
+ * 获取文章详细内容
+ */
+func (c *ArticleController) GetArticleDetails() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	a := &class.Article{Id: id}
 	a.ReadDB()
@@ -87,11 +63,35 @@ func (c *ArticleController) Get() {
 	a.Replys = class.Reply{Article: a}.Gets()
 	c.Data["article"] = a
 	c.Data["replyTree"] = a.GetReplyTree()
-
 	c.TplName = "article/article.html"
 }
 
-func (c *ArticleController) PageEdit() {
+/*
+ * 删除文章
+ */
+func (c *ArticleController) DelArticle() {
+	c.CheckLogin()
+	u := c.GetSession("user").(class.User)
+
+	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+
+	a := &class.Article{Id: id}
+	a.ReadDB()
+
+	if u.Id != a.Author.Id {
+		c.DoLogout()
+	}
+
+	a.Defunct = true
+	a.Update()
+
+	c.Redirect("/user/"+a.Author.Id, 302)
+}
+
+/**
+ *进入文章编辑页面
+ */
+func (c *ArticleController) EditArticle() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	a := &class.Article{Id: id}
 	a.ReadDB()
@@ -100,7 +100,11 @@ func (c *ArticleController) PageEdit() {
 	c.TplName = "article/edit.html"
 }
 
-func (c *ArticleController) Edit() {
+/**
+ *文章编辑页面后结果在提交
+ */
+
+func (c *ArticleController) SubmitEditArticle() {
 	c.CheckLogin()
 	u := c.GetSession("user").(class.User)
 
@@ -131,21 +135,42 @@ func (c *ArticleController) Edit() {
 
 }
 
-func (c *ArticleController) Del() {
-	c.CheckLogin()
-	u := c.GetSession("user").(class.User)
+/**
+ * 存档
+ */
+func (c *ArticleController) Archive() {
 
-	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	errmsg := ""
 
-	a := &class.Article{Id: id}
-	a.ReadDB()
+	a := class.Article{}
 
-	if u.Id != a.Author.Id {
-		c.DoLogout()
+	//获取文章包含的tag标签
+	if len(c.GetString("tag")) > 0 {
+		tag := class.Tag{Name: c.GetString("tag")}.Get()
+		if tag == nil {
+			errmsg += fmt.Sprintf("Tag[%s] is not exist.\n", c.GetString("tag"))
+		} else {
+			a.Tags = []*class.Tag{tag}
+		}
 	}
 
-	a.Defunct = true
-	a.Update()
+	//获取文章的坐着信息
+	if len(c.GetString("author")) > 0 {
+		author := class.User{Id: c.GetString("author")}.Get()
+		if author == nil {
+			errmsg += fmt.Sprintf("User[%s] is not exist.\n", c.GetString("author"))
+		} else {
+			a.Author = author
+		}
+	}
+	//获取该篇文章主要内容
+	if len(errmsg) == 0 {
+		rets := a.Gets()
+		c.Data["articles"] = rets
+	}
 
-	c.Redirect("/user/"+a.Author.Id, 302)
+	c.Data["err"] = errmsg
+
+	c.TplName = "article/archive.html"
+
 }

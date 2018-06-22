@@ -44,7 +44,7 @@ func (c *UserController) Profile() {
  * 未登录前主页
  */
 func (c *UserController) UnLoginHomePage() {
-	c.TplName = "user/unloginhomepage.html"
+	c.TplName = "user/homepage.html"
 }
 
 /**
@@ -53,7 +53,7 @@ func (c *UserController) UnLoginHomePage() {
 func (c *UserController) UserSetting() {
 	//检查用户是否已经登录
 	c.CheckLogin()
-	c.TplName = "user/usersetting.html"
+	c.TplName = "user/setting.html"
 }
 
 /*
