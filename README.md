@@ -10,7 +10,7 @@ go get github.com/mattn/go-sqlite3
 3.确认程序没有错误时，执行bee run
 
 
-todo
+# todo
 
 1. 添加git评论 仓库https://extremegtr.github.io/2017/09/07/Add-Gitment-comment-system-to-hexo-theme-NexT/
 2. 头像上传是采用七牛存储还是腾讯云存储，再看，先使用默认图片

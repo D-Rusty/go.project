@@ -35,7 +35,7 @@ func (c *BaseController) DoLogin(u class.User) {
  */
 func (c *BaseController) DoLogout() {
 	c.DestroySession()
-	c.Redirect("/", 302)
+	c.Redirect("/login", 302)
 }
 
 /*

@@ -57,7 +57,7 @@
         var tmp = ajaxSubmit(this, function () {
             if (tmp.responseJSON.success == true) {
                 alert("成功")
-                location.href = '/'
+                location.href = '/login'
             } else {
                 alert(tmp.responseJSON.content)
             }

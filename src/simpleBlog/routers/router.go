@@ -8,9 +8,9 @@ import (
 func init() {
 	//用户管理
 	//首页
-	beego.Router("/", &controllers.UserController{}, `get:UnLoginHomePage`)
+	beego.Router("/", &controllers.UserController{}, `get:Profile`)
 	//用户登录
-	beego.Router("/login", &controllers.UserController{}, `post:Login`)
+	beego.Router("/login", &controllers.UserController{}, `get:LoginPage;post:Login`)
 	//用户注册
 	beego.Router("/register", &controllers.UserController{}, `get:RegisterPage;post:Register`)
 	//退出登录
@@ -18,7 +18,7 @@ func init() {
 	//用户信息设置
 	beego.Router("/setting", &controllers.UserController{}, `get:UserSetting;post:Setting`)
 	//个人主页
-	beego.Router("/user/:id", &controllers.UserController{}, `get:Profile`)
+	beego.Router("/user/:username", &controllers.UserController{}, `get:Profile`)
 
 	//文章管理
 	//新建文章
