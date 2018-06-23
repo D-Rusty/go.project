@@ -14,6 +14,6 @@ function ajaxSubmit(frm, fn) {
         url: frm.action,
         type: frm.method,
         data: dat,
-        success: fn
+        success: fn()
     })
 }

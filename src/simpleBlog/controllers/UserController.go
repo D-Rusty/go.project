@@ -15,6 +15,8 @@ type UserController struct {
 /**
  * 个人主页
  */
+
+
 func (c *UserController) Profile() {
 	class.InitData()
 	//获取来自页面的用户id
@@ -235,10 +237,17 @@ func (c *UserController) Logout() {
  */
 func (c *UserController) SettingInfo() {
 
+	defer func() {
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	}()
+
 	user := c.GetSession("user").(class.User)
 	user.Nick = c.GetString("nick")
 	user.Email = c.GetString("email")
+	user.Describe = c.GetString("describe")
 	user.Hobby = c.GetString("hobby")
+
 	err := user.Update()
 
 	if err == nil {
@@ -250,13 +259,6 @@ func (c *UserController) SettingInfo() {
 		c.ret.Content = "用户信息设置失败"
 	}
 
-	defer func() {
-
-		c.Data["json"] = c.ret
-
-		c.ServeJSON()
-	}()
-
 }
 
 /**
@@ -264,28 +266,41 @@ func (c *UserController) SettingInfo() {
  */
 func (c *UserController) SettingPwd() {
 
-	user := c.GetSession("user").(class.User)
-
-	if class.PwCheck(c.GetString("pwd1"), user.Password) == false {
-		c.ret.Ok = false
-		c.ret.Content = "密码输入错误"
-	} else {
-		err := user.Update()
-
-		c.DoLogin(user)
-
-		if err == nil {
-			c.ret.Ok = true
-			c.ret.Content = "密码设置成功"
-		} else {
-			c.ret.Ok = false
-			c.ret.Content = "密码设置失败"
-		}
-	}
-
 	defer func() {
 		c.Data["json"] = c.ret
 		c.ServeJSON()
 	}()
+
+	user := c.GetSession("user").(class.User)
+
+	oldPwd := c.GetString("oldpwd")
+	newPwd := c.GetString("newpwd")
+	confirmpwd := c.GetString("confirmpwd")
+
+	valid := validation.Validation{}
+
+	switch {
+	case confirmpwd != newPwd:
+		valid.Error("新密码输入不一致")
+	case class.PwCheck(oldPwd, user.Password) == false:
+		valid.Error("密码输入错误")
+	case oldPwd == newPwd && oldPwd == confirmpwd:
+		valid.Error("新旧密码不可以相同")
+	default:
+		user.Password = class.PwGen(confirmpwd)
+		err := user.Update()
+		c.DoLogin(user)
+		if err == nil {
+			c.ret.Ok = true
+			c.ret.Content = "密码设置成功"
+			return
+		} else {
+			c.ret.Content = "密码设置失败"
+		}
+	}
+
+	c.ret.Ok = false
+
+	c.ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
 
 }

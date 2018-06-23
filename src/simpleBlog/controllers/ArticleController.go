@@ -105,19 +105,36 @@ func (c *ArticleController) EditArticle() {
  */
 
 func (c *ArticleController) SubmitEditArticle() {
+
 	c.CheckLogin()
+
+	c.ret.Ok = false
+	c.ret.Content = "编辑失败"
+
+	defer func() {
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	}()
+
 	u := c.GetSession("user").(class.User)
 
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+
 	a := &class.Article{Id: id}
+
 	a.ReadDB()
 
-	if u.UId != a.Author.UId {
+	if u.UserName != a.Author.UserName {
 		c.DoLogout()
 	}
 
 	strs := strings.Split(c.GetString("tag"), ",")
+
 	tags := []*class.Tag{}
+
+	//1.将传入的tag标签用逗号进行分割并去掉多余的空格
+	//2.将传入的tag字符串插入到数据库
+	//3.将传入的tag存放到tag map表中
 	for _, v := range strs {
 		tags = append(tags, class.Tag{Name: strings.TrimSpace(v)}.GetOrNew())
 	}
@@ -127,11 +144,12 @@ func (c *ArticleController) SubmitEditArticle() {
 
 	a.Tags = tags
 
-	a.Update()
+	err := a.Update()
 
-	c.ret.Ok = true
-	c.Data["json"] = c.ret
-	c.ServeJSON()
+	if err == nil {
+		c.ret.Ok = true
+		c.ret.Content = "编辑成功"
+	}
 
 }
 
@@ -154,6 +172,8 @@ func (c *ArticleController) Archive() {
 		}
 	}
 
+	fmt.Println(len(a.Tags))
+
 	//获取文章的坐着信息
 	if len(c.GetString("author")) > 0 {
 		author := class.User{UId: c.GetString("author")}.Get()
@@ -163,6 +183,9 @@ func (c *ArticleController) Archive() {
 			a.Author = author
 		}
 	}
+
+	fmt.Println(a.Author)
+
 	//获取该篇文章主要内容
 	if len(errmsg) == 0 {
 		rets := a.Gets()

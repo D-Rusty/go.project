@@ -7,26 +7,31 @@ import (
 	"fmt"
 )
 
+//关于模型的定义请参考:https://beego.me/docs/mvc/model/models.md
 type Article struct {
-	Id        int
-	Title     string `orm:"size(80)"`
-	Content   string `orm:"type(text)`
-	Author    *User  `orm:"rel(fk)"`
+	Id      int
+	Title   string `orm:"size(80)"`
+	Content string `orm:"type(text)`
+
+	Author    *User `orm:"rel(fk)"` //多篇文章对应一个作者
 	NumReplys int
 	NumViews  int
 
-	Replys []*Reply `orm:"-"`
-
+	Replys []*Reply `orm:"-"` //忽略评论字段
+	//文章与标签之间设置多对多关系,一篇文章对应多个标签，一个标签对应多篇文章
 	Tags []*Tag `orm:"rel(m2m)"`
-
+	//auto_now_add 第一次保存时才设置时间
 	Time time.Time `orm:"auto_now_add;type(datetime)"`
 
 	Defunct bool
 }
 
 func (a *Article) ReadDB() (err error) {
+
 	o := orm.NewOrm()
+
 	if err = o.Read(a); err != nil {
+		//日志打印
 		beego.Info(err)
 	}
 
@@ -44,13 +49,19 @@ func (a Article) Create() (n int64, err error) {
 }
 
 func (a Article) Update() (err error) {
+
 	o := orm.NewOrm()
-	if _, err = o.Update(&a); err != nil {
+
+	_, err = o.Update(&a)
+
+	if err != nil {
 		beego.Info(err)
 	}
 
 	m2m := o.QueryM2M(&a, "Tags")
+
 	old := Article{Id: a.Id}
+
 	_, _ = o.LoadRelated(&old, "Tags")
 
 	//insert
@@ -60,9 +71,8 @@ VI:
 			if vi.Id == vj.Id {
 				continue VI;
 			}
-
-			m2m.Add(vi)
 		}
+		m2m.Add(vi)
 	}
 	//del
 VD:
@@ -110,6 +120,7 @@ func (a Article) Gets() (rets []Article) {
 	return
 
 }
+
 
 func (a *Article) GetReplyTree() (rets [] *ReplyTree) {
 

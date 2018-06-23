@@ -23,6 +23,9 @@ func (t Tag) Get() *Tag {
 	return &t
 }
 
+/**
+ * 读取或创建一个tag
+ */
 func (t Tag) GetOrNew() *Tag {
 	o := orm.NewOrm()
 	_, _, _ = o.ReadOrCreate(&t, "Name")

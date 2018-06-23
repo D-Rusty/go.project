@@ -28,7 +28,7 @@
 
                 <span>
                 {{ if $.user}}
-                {{if eq .article.Author.Id $.user.Id}}
+                {{if eq .article.Author.UId $.user.UId}}
                     <span class="pull-right">
 								<a href="/article/edit/{{.article.Id}}">编辑</a>
 							</span>
@@ -42,13 +42,12 @@
             </div>
 
             <hr>
-        {{.replyTree}}
             <div>
             {{define "replybox"}}
             {{range $idx, $reply := .}}
                 <div class="reply-box">
                     <p>
-                        <a href="/user/{{.Author.Id}}">{{.Author.Nick}}</a>
+                        <a href="/user/{{.Author.UId}}">{{.Author.Nick}}</a>
                     {{.Time}}
                         <span class="pull-right">
 									<a href="javascript:;" data-user="{{.Author.Nick}}" data-reply="{{.Id}}">回复</a>
@@ -79,7 +78,7 @@
         <div class="col-sm-3">
             <h4>本文标签</h4>
         {{range .article.Tags}}
-            <a href="/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
+            <a href="/article/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
         {{end}}
         </div>
     </div>
@@ -101,8 +100,6 @@
     $("form").bind("submit", function () {
         var tmp = ajaxSubmit(this, function () {
             var ok = tmp.responseJSON.success;
-
-            //	返回服务器信息
             if (ok == true) {
                 alert("创建评论成功");
                 location.reload();

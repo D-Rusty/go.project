@@ -2,16 +2,14 @@
 <html>
 <head>
     <title>New</title>
+    <meta charset="UTF-8">
 {{template "head.html" .}}
 </head>
 <body>
-
-{{template "header.html" .}}
-
 <div id="wrap">
     <div class="container">
         <div class="col-sm-7">
-            <form method="post">
+            <form method="post" action="/article/edit/{{.article.Id}}">
                 <input name="title" class="form-control" placeholder="请输入标题" value="{{.article.Title}}">
                 <br>
                 <textarea name="content" class="form-control" rows="20"
@@ -30,11 +28,9 @@
     $('form').bind('submit', function () {
         var tmp = ajaxSubmit(this, function () {
             if (tmp.responseJSON.success == true) {
-                alert("成功")
                 location.href = '/article/{{.article.Id}}'
-            } else {
-                alert(tmp.responseJSON.content)
             }
+            alert(tmp.responseJSON.content)
         })
         return false;
     })

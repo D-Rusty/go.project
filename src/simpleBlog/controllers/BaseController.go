@@ -50,7 +50,7 @@ func (c *BaseController) IsLogin() bool {
  */
 func (c *BaseController) CheckLogin() {
 	if !c.IsLogin() {
-		c.Redirect("/", 302)
+		c.Redirect("/login", 302)
 		c.Abort("302")
 	}
 }

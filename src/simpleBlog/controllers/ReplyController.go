@@ -4,7 +4,6 @@ import (
 	"simpleBlog/models/class"
 	"regexp"
 	"strings"
-	"fmt"
 )
 
 type ReplyController struct {
@@ -35,8 +34,6 @@ func (c *ReplyController) CreateReply() {
 	if ok, _ := regexp.MatchString(`^\@\w+ `, reply.Content); ok {
 		reply.ParentId, _ = c.GetInt("parent_id")
 		reply.Content = strings.SplitN(reply.Content, " ", 2)[1]
-		fmt.Print("reply.Content:")
-		fmt.Println(reply.Content)
 	}
 
 	if len(reply.Content) < 1 {

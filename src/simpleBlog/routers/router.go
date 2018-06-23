@@ -15,8 +15,15 @@ func init() {
 	beego.Router("/register", &controllers.UserController{}, `get:RegisterPage;post:Register`)
 	//退出登录
 	beego.Router("/logout", &controllers.UserController{}, `get:Logout`)
+	//获取设置页面
+	beego.Router("/setting", &controllers.UserController{}, `get:UserSetting`)
+
 	//用户信息设置
-	beego.Router("/setting", &controllers.UserController{}, `get:UserSetting;post:Setting`)
+	beego.Router("/settinginfo", &controllers.UserController{}, `post:SettingInfo`)
+
+	//用户密码设置
+	beego.Router("/settingpwd", &controllers.UserController{}, `post:SettingPwd`)
+
 	//个人主页
 	beego.Router("/user/:username", &controllers.UserController{}, `get:Profile`)
 
