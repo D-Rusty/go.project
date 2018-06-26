@@ -2,17 +2,25 @@
 <html lang="en">
 <!--用户注册-->
 <head>
-    <meta charset="UTF-8">
     <title>Register</title>
-
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 
 {{template "head.html" .}}
 </head>
 <body>
-<img src="static/img/persion_log.jpg"/>
+
+
 <div class="col-sm-4">
+    <div>
+
+        <img src="http://pax6k3826.bkt.clouddn.com/persion_log.jpg" width="90px" height="90px">
+        <form action="/file/imgupload" enctype="multipart/form-data" method="post">
+            <input type="file" name="imgFiles"/>
+            <input type="submit"/>
+        </form>
+    </div>
     <div class="well">
-        <form action="/register" method="post">
+        <form action="/register" enctype="multipart/form-data" method="post">
             <div class="form-group">
                 <label>UserName</label>
                 <input class="form-control" name="username">
@@ -53,17 +61,21 @@
 </div>
 
 <script type="text/javascript">
-    $('form').bind('submit', function () {
-        var tmp = ajaxSubmit(this, function () {
-            if (tmp.responseJSON.success == true) {
-                alert("成功")
-                location.href = '/login'
-            } else {
-                alert(tmp.responseJSON.content)
-            }
+
+    if (this.action.includes('/file/imgupload')) {
+        $('form').bind('submit', function () {
+            var tmp = ajaxSubmit(this, function () {
+                if (tmp.responseJSON.success == true) {
+                    alert("成功")
+                    location.href = '/login'
+                } else {
+                    alert(tmp.responseJSON.content)
+                }
+            })
+            return false
         })
-        return false
-    })
+    }
+
 </script>
 
 </body>

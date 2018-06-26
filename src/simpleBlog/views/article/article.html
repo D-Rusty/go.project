@@ -41,75 +41,55 @@
                 <pre>{{.article.Content}}</pre>
             </div>
 
-            <hr>
-            <div>
-            {{define "replybox"}}
-            {{range $idx, $reply := .}}
-                <div class="reply-box">
-                    <p>
-                        <a href="/user/{{.Author.UId}}">{{.Author.Nick}}</a>
-                    {{.Time}}
-                        <span class="pull-right">
-									<a href="javascript:;" data-user="{{.Author.Nick}}" data-reply="{{.Id}}">回复</a>
-                        </span>
-                    </p>
-                    <pre>{{.Reply.Content}}</pre>
-                    <hr>
-                {{if .Childs}}
-								{{template "replybox" .Childs}}
-							{{end}}
-                </div>
-            {{end}}
+            <div class="col-sm-3">
+                <h4>本文标签</h4>
+            {{range .article.Tags}}
+                <a href="/article/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
             {{end}}
             </div>
-
-        {{template "replybox" .replyTree}}
-
-            <div>
-                <form action="/create/reply" method="post">
-                    <textarea name="content" class="form-control"></textarea>
-                    <input type="hidden" name="article_id" value="{{.article.Id}}">
-                    <input type="hidden" name="parent_id">
-                    <input type="submit" class="btn btn-default">
-                </form>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <h4>本文标签</h4>
-        {{range .article.Tags}}
-            <a href="/article/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
-        {{end}}
         </div>
     </div>
-</div>
+    <div id="container"></div>
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            id: window.location.pathname,
+            owner: 'D-Rusty',
+            repo: 'go.project',
+            oauth: {
+                client_id: '3d7b3da48fb59d92c699',
+                client_secret: 'fbc1bf4a12e6f8c77b0549a25fae1bfadf98f933',
+            },
+        })
+        gitment.render('container')
+    </script>
+    <script type="text/javascript">
 
-<script type="text/javascript">
+        function bindParent(id, nick) {
+            console.log(id, nick)
+            $("[name=parent_id]").val(id);
+            $("[name=content]").val('@' + nick + ' ').focus();
+        }
 
-    function bindParent(id, nick) {
-        console.log(id, nick)
-        $("[name=parent_id]").val(id);
-        $("[name=content]").val('@' + nick + ' ').focus();
-    }
-
-    $("a[data-reply]").click(function () {
-        console.log($(this).data('reply'), $(this).data('user'))
-        bindParent($(this).data('reply'), $(this).data('user'));
-    });
-
-    $("form").bind("submit", function () {
-        var tmp = ajaxSubmit(this, function () {
-            var ok = tmp.responseJSON.success;
-            if (ok == true) {
-                alert("创建评论成功");
-                location.reload();
-            } else {
-                alert(tmp.responseJSON.content)
-            }
+        $("a[data-reply]").click(function () {
+            console.log($(this).data('reply'), $(this).data('user'))
+            bindParent($(this).data('reply'), $(this).data('user'));
         });
-        return false;
-    })
-</script>
+
+        $("form").bind("submit", function () {
+            var tmp = ajaxSubmit(this, function () {
+                var ok = tmp.responseJSON.success;
+                if (ok == true) {
+                    alert("创建评论成功");
+                    location.reload();
+                } else {
+                    alert(tmp.responseJSON.content)
+                }
+            });
+            return false;
+        })
+    </script>
 
 </body>
 </html>

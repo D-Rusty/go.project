@@ -3,12 +3,17 @@ package routers
 import (
 	"simpleBlog/controllers"
 	"github.com/astaxie/beego"
+	"net/http"
+	"fmt"
 )
 
 func init() {
 	//用户管理
 	//首页
 	beego.Router("/", &controllers.UserController{}, `get:Profile`)
+
+	//上传头像
+
 	//用户登录
 	beego.Router("/login", &controllers.UserController{}, `get:LoginPage;post:Login`)
 	//用户注册
@@ -40,5 +45,18 @@ func init() {
 	beego.Router("/article/archive", &controllers.ArticleController{}, "get:Archive")
 	//创建评论
 	beego.Router("/create/reply", &controllers.ReplyController{}, `post:CreateReply`)
+
+	beego.Router("/file/imgupload", &controllers.UserController{}, "post:UpLoadImg")
+
+}
+
+func UpLoadImg(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+
+	req.ParseForm()
+	// 接收图片
+	_, handle, _ := req.FormFile("imgFiles")
+
+	fmt.Println("sssss==" + handle.Filename)
 
 }

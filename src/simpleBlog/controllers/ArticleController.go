@@ -36,7 +36,7 @@ func (c *ArticleController) PostNewArtic() {
 	}
 
 	//将新写好的文章插入数据库
-	n, err := a.Create()
+	n, err := a.Insert()
 
 	if err == nil {
 		c.ret.Ok = true
@@ -58,9 +58,9 @@ func (c *ArticleController) PostNewArtic() {
 func (c *ArticleController) GetArticleDetails() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	a := &class.Article{Id: id}
-	a.ReadDB()
+	a.QueryArticle()
 	a.Author.ReadDB()
-	a.Replys = class.Reply{Article: a}.Gets()
+	a.Replys = class.Reply{Article: a}.QueryAllReply()
 	c.Data["article"] = a
 	c.Data["replyTree"] = a.GetReplyTree()
 	c.TplName = "article/article.html"
@@ -76,7 +76,7 @@ func (c *ArticleController) DelArticle() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 
 	a := &class.Article{Id: id}
-	a.ReadDB()
+	a.QueryArticle()
 
 	if u.UId != a.Author.UId {
 		c.DoLogout()
@@ -94,7 +94,7 @@ func (c *ArticleController) DelArticle() {
 func (c *ArticleController) EditArticle() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	a := &class.Article{Id: id}
-	a.ReadDB()
+	a.QueryArticle()
 	a.Author.ReadDB()
 	c.Data["article"] = a
 	c.TplName = "article/edit.html"
@@ -122,7 +122,7 @@ func (c *ArticleController) SubmitEditArticle() {
 
 	a := &class.Article{Id: id}
 
-	a.ReadDB()
+	a.QueryArticle()
 
 	if u.UserName != a.Author.UserName {
 		c.DoLogout()
@@ -188,7 +188,7 @@ func (c *ArticleController) Archive() {
 
 	//获取该篇文章主要内容
 	if len(errmsg) == 0 {
-		rets := a.Gets()
+		rets := a.QueryFilterOptionsTagArticle()
 		c.Data["articles"] = rets
 	}
 

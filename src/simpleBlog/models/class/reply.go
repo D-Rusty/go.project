@@ -16,7 +16,10 @@ type Reply struct {
 	Defunct  bool
 }
 
-func (a *Reply) Create() (n int64, err error) {
+/**
+ * 插入评论
+ */
+func (a *Reply) Insert() (n int64, err error) {
 	o := orm.NewOrm()
 	if n, err = o.Insert(a); err != nil {
 		beego.Info(err)
@@ -24,14 +27,16 @@ func (a *Reply) Create() (n int64, err error) {
 	return
 }
 
-func (a Reply) Gets() (rets [] *Reply) {
+/**
+ * 查询所有评论
+ */
+func (a Reply) QueryAllReply() (rets [] *Reply) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("reply")
+
+	//添加查询条件为指定文章id的评论
 	if a.Article != nil {
 		qs = qs.Filter("article_id", a.Article.Id)
-	}
-	if a.Author != nil {
-		qs = qs.Filter("author_id", a.Author.UId)
 	}
 
 	qs = qs.Filter("defunct", 0)
@@ -39,7 +44,9 @@ func (a Reply) Gets() (rets [] *Reply) {
 	qs.All(&rets)
 
 	for k := range rets {
-		rets[k].Article.ReadDB()
+
+		rets[k].Article.QueryArticle()
+
 		rets[k].Author.ReadDB()
 	}
 

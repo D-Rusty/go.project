@@ -27,7 +27,6 @@
     $('form').bind('submit', function () {
         var tmp = ajaxSubmit(this, function () {
             if (tmp.responseJSON.success == true) {
-
                 location.href = "/user/" + tmp.responseJSON.content
             } else {
                 alert(tmp.responseJSON.content)

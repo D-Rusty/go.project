@@ -42,7 +42,7 @@ func (c *ReplyController) CreateReply() {
 		return
 	}
 
-	_, err := reply.Create()
+	_, err := reply.Insert()
 	if err != nil {
 		c.RET.Ok = false
 		c.RET.Content = err.Error()

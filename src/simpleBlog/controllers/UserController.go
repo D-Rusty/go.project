@@ -5,6 +5,10 @@ import (
 	"github.com/astaxie/beego/validation"
 	"time"
 	"fmt"
+	"path"
+	"github.com/qiniu/api.v7/storage"
+	"github.com/qiniu/api.v7/auth/qbox"
+	"context"
 )
 
 type UserController struct {
@@ -15,7 +19,6 @@ type UserController struct {
 /**
  * 个人主页
  */
-
 
 func (c *UserController) Profile() {
 	class.InitData()
@@ -35,13 +38,9 @@ func (c *UserController) Profile() {
 	//将查询到的用户信息，存储到map中
 	c.Data["u"] = u
 	//查询和该用户相关的文章
-	as := class.Article{Author: &u}.Gets()
-	//查询和该用户相关文章的评论
-	replys := class.Reply{Author: &u}.Gets()
+	as := class.Article{}.QueryAllArticle()
 	//文章列表数据保存到map中
 	c.Data["articles"] = as
-	//文章评论数据存储到map中
-	c.Data["replys"] = replys
 	//设置模板导向
 	c.TplName = "user/profile.html"
 }
@@ -303,4 +302,69 @@ func (c *UserController) SettingPwd() {
 
 	c.ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
 
+}
+
+/***
+
+ */
+func (c *UserController) UpLoadImg() {
+	c.TplName = "user/register.html"
+	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
+	filename := h.Filename
+	fmt.Println(filename)
+	f.Close() //关闭上传的文件，不然的话会出现临时文件不能清除的情况
+	c.SaveToFile("imgFiles", path.Join("static/img", filename))
+
+	simeUploadFile(filename)
+
+}
+
+/**
+ * 简单的上传文件
+ */
+func simeUploadFile(filename string) {
+
+	path := path.Join("static/img", filename)
+	accessKey := "HlE45UT8wRJBPWBb4HIup2dKn33cWcBaq6Wo-jye"
+	secretKey := "IqPCJAY-0Q90VX9vF7BNSg2a_uzGlVH8TwvOi_j0"
+
+	localFile := path
+
+	key := filename
+
+	bucket := "drustydatarepo"
+
+	putPolicy := storage.PutPolicy{
+		Scope: bucket,
+	}
+
+	mac := qbox.NewMac(accessKey, secretKey)
+
+	upToken := putPolicy.UploadToken(mac)
+
+	cfg := storage.Config{}
+
+	cfg.Zone = &storage.ZoneHuanan
+
+	cfg.UseHTTPS = false
+	cfg.UseCdnDomains = false
+
+	formUploader := storage.NewFormUploader(&cfg)
+
+	ret := storage.PutRet{}
+
+	putExTtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+
+	err := formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExTtra)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(ret.Key, ret.Hash)
 }
