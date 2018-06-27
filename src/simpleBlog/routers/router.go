@@ -3,8 +3,6 @@ package routers
 import (
 	"simpleBlog/controllers"
 	"github.com/astaxie/beego"
-	"net/http"
-	"fmt"
 )
 
 func init() {
@@ -46,17 +44,6 @@ func init() {
 	//创建评论
 	beego.Router("/create/reply", &controllers.ReplyController{}, `post:CreateReply`)
 
-	beego.Router("/file/imgupload", &controllers.UserController{}, "post:UpLoadImg")
-
-}
-
-func UpLoadImg(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-
-	req.ParseForm()
-	// 接收图片
-	_, handle, _ := req.FormFile("imgFiles")
-
-	fmt.Println("sssss==" + handle.Filename)
+	beego.Router("/file/imgupload", &controllers.UserController{}, "post:RegisterUserUpLoadImg")
 
 }

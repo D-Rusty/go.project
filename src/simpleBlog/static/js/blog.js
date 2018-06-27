@@ -8,13 +8,22 @@ function getFormJson(frm) {
 }
 
 function ajaxSubmit(frm, fn) {
-
     var dat = getFormJson(frm)
     return $.ajax({
         url: frm.action,
-        contentType: "multipart/form-data",
         type: frm.method,
         data: dat,
+        success: fn
+    })
+}
+
+
+function ajaxx(frm, fn) {
+    var dat = getFormJson(frm)
+    return $.ajax({
+        url: "/file/imgupload",
+        contentType: "multipart/form-data",
+        type: frm.method,
         success: fn
     })
 }

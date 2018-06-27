@@ -8,6 +8,10 @@ import (
 	"crypto/sha1"
 	"crypto/md5"
 	"encoding/base64"
+	"github.com/qiniu/api.v7/auth/qbox"
+	"github.com/qiniu/api.v7/storage"
+	"path"
+	"context"
 )
 
 type User struct {
@@ -167,4 +171,50 @@ func PwCheck(pwd, saved string) bool {
 	salt := saved[len(saved)-4:]
 
 	return Sha1(Md5(pwd)+salt)+salt == saved
+}
+
+/**
+ * 简单的上传文件
+ */
+func SimeUploadFile(filename string) (err error) {
+
+	path := path.Join("static/img", filename)
+	accessKey := "HlE45UT8wRJBPWBb4HIup2dKn33cWcBaq6Wo-jye"
+	secretKey := "IqPCJAY-0Q90VX9vF7BNSg2a_uzGlVH8TwvOi_j0"
+
+	localFile := path
+
+	key := filename
+
+	bucket := "drustydatarepo"
+
+	putPolicy := storage.PutPolicy{
+		Scope: bucket,
+	}
+
+	mac := qbox.NewMac(accessKey, secretKey)
+
+	upToken := putPolicy.UploadToken(mac)
+
+	cfg := storage.Config{}
+
+	cfg.Zone = &storage.ZoneHuanan
+
+	cfg.UseHTTPS = false
+	cfg.UseCdnDomains = false
+
+	formUploader := storage.NewFormUploader(&cfg)
+
+	ret := storage.PutRet{}
+
+	putExTtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+
+	err = formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExTtra)
+
+	return err
+
 }
