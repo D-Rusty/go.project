@@ -63,10 +63,10 @@
 
 <script type="text/javascript">
     $('form').bind('submit', function () {
+
         alert(this.action)
 
         if (!this.action.includes('/file/imgupload')) {
-            alert('/file/imgupload')
             var tmp = ajaxSubmit(this, function () {
                 if (tmp.responseJSON.success == true) {
                     alert("成功")

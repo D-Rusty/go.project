@@ -3,7 +3,7 @@
 <head>
     <title>{{.article.Title}} - {{.article.Author.Nick}}</title>
 
-{{template "include.html" .}}
+{{template "head.html" .}}
 
     <style type="text/css">
         .reply-box .reply-box {
@@ -12,7 +12,6 @@
     </style>
 </head>
 <body>
-
 {{template "header.html" .}}
 
 
@@ -38,7 +37,10 @@
 
             </p>
             <div>
-                <pre>{{.article.Content}}</pre>
+
+
+               {{str2html .bodyContent}}
+
             </div>
 
             <div class="col-sm-3">

@@ -46,4 +46,6 @@ func init() {
 
 	beego.Router("/file/imgupload", &controllers.UserController{}, "post:RegisterUserUpLoadImg")
 
+	beego.Router("/file/resetLogoImg", &controllers.UserController{}, "post:ResetUserLogoImg")
+
 }

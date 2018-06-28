@@ -18,7 +18,7 @@
                     <a href="#userinfo" role="tab" data-toggle="tab">基本信息</a>
                 </li>
                 <li role="presentation" class="">
-                    <a href="#avator" role="tab" data-toggle="tab">头像设置</a>
+                    <a href="#userlogo" role="tab" data-toggle="tab">头像设置</a>
                 </li>
                 <li role="presentation" class="">
                     <a href="#account" role="tab" data-toggle="tab">安全中心</a>
@@ -83,6 +83,15 @@
                         <input type="submit" class="btn btn-default">
                     </form>
                 </div>
+                <div role="tapanel" class="tab-pane" id="userlogo">
+                    <h2>头像设置</h2>
+                    <hr>
+                    <img src="{{.user.LogoImgUrl}}" width="90px" height="90px" id="logo">
+                    <form id="upload" action="/file/resetLogoImg" enctype="multipart/form-data" method="post">
+                        <input type="file" name="imgFiles"/>
+                        <input type="submit"/>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -92,17 +101,22 @@
     $('form').bind('submit', function () {
 
         var action = this.action
-        var tmp = ajaxSubmit(this, function () {
-            alert(tmp.responseJSON.content)
-            if (action.includes("/settingpwd")) {
-                location.href = "/login"
-            }
 
-            if (action.toString().includes("/seetinginfo")) {
-                this.reload()
-            }
-        })
-        return false;
+        if (!action.includes("/file/resetLogoImg")) {
+            var tmp = ajaxSubmit(this, function () {
+
+                if (action.includes("/settingpwd")) {
+                    location.href = "/login"
+                }
+
+                if (action.toString().includes("/seetinginfo")) {
+                    this.reload()
+                }
+
+            })
+            return false;
+        }
+
     })
 
 

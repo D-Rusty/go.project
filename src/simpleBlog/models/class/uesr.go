@@ -218,3 +218,48 @@ func SimeUploadFile(filename string) (err error) {
 	return err
 
 }
+
+/**
+ * 覆盖已存在的文件
+ * conversImgName 需要被覆盖的文件名称
+ * uploadingImgName
+ *
+*/
+func CoversimeUploadFile(conversImgName string, uploadingImgName string) (err error) {
+	path := path.Join("static/img", uploadingImgName)
+	accessKey := "HlE45UT8wRJBPWBb4HIup2dKn33cWcBaq6Wo-jye"
+	secretKey := "IqPCJAY-0Q90VX9vF7BNSg2a_uzGlVH8TwvOi_j0"
+	localFile := path
+	bucket := "drustydatarepo"
+	key := conversImgName
+	keyToOverwrite := conversImgName
+
+	putPolicy := storage.PutPolicy{
+		Scope: fmt.Sprintf("%s:%s", bucket, keyToOverwrite),
+	}
+
+	mac := qbox.NewMac(accessKey, secretKey)
+
+	upToken := putPolicy.UploadToken(mac)
+
+	cfg := storage.Config{}
+
+	cfg.Zone = &storage.ZoneHuanan
+
+	cfg.UseHTTPS = false
+	cfg.UseCdnDomains = false
+
+	formUploader := storage.NewFormUploader(&cfg)
+
+	ret := storage.PutRet{}
+
+	putExtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+
+	err = formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExtra)
+
+	return err
+}

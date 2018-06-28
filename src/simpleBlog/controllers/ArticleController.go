@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"html/template"
+	"github.com/russross/blackfriday"
 )
 
 type ArticleController struct {
@@ -29,6 +31,8 @@ func (c *ArticleController) PostNewArtic() {
 
 	u := c.GetSession("user").(class.User)
 
+	println(c.GetString("content"))
+
 	a := &class.Article{
 		Title:   c.GetString("title"),
 		Content: c.GetString("content"),
@@ -43,6 +47,21 @@ func (c *ArticleController) PostNewArtic() {
 		c.ret.Content = n
 		c.Data["json"] = c.ret
 		c.ServeJSON()
+
+		//
+		//tmpl := template.Must(template.New("article.html").Funcs(
+		//	template.FuncMap{"markDown": markDowner})
+		//.ParseFiles("article.html"))
+
+		//err := tmpl.ExecuteTemplate("index.html", n)
+		//
+		//if err != nil {
+		//	http.Error(w, err.Error(), http.StatusInternalServerError)
+		//}
+		//
+
+		//markDowner(n)
+
 		return
 	}
 
@@ -61,8 +80,14 @@ func (c *ArticleController) GetArticleDetails() {
 	a.QueryArticle()
 	a.Author.ReadDB()
 	a.Replys = class.Reply{Article: a}.QueryAllReply()
+	//"<div><p>地球你好</p><p>很好</p><p>欢迎来火星</div>"
 	c.Data["article"] = a
 	c.Data["replyTree"] = a.GetReplyTree()
+
+	body := string(blackfriday.MarkdownCommon([]byte(a.Content)))
+
+	fmt.Println(body)
+	c.Data["bodyContent"] = body
 	c.TplName = "article/article.html"
 }
 
@@ -97,7 +122,7 @@ func (c *ArticleController) EditArticle() {
 	a.QueryArticle()
 	a.Author.ReadDB()
 	c.Data["article"] = a
-	c.TplName = "article/edit.html"
+	c.TplName = "article/create.html"
 }
 
 /**
@@ -196,4 +221,9 @@ func (c *ArticleController) Archive() {
 
 	c.TplName = "article/archive.html"
 
+}
+
+func markDowner(args ...interface{}) template.HTML {
+	s := blackfriday.MarkdownCommon([]byte(fmt.Sprintf("%s", args...)))
+	return template.HTML(s)
 }

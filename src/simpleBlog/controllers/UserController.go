@@ -6,6 +6,7 @@ import (
 	"time"
 	"fmt"
 	"path"
+	"strings"
 )
 
 type UserController struct {
@@ -18,6 +19,8 @@ type UserController struct {
  */
 var user = class.User{}
 
+const qiuNiuUrl = "http://pax6k3826.bkt.clouddn.com/"
+
 /**
  * 个人主页
  */
@@ -26,18 +29,8 @@ func (c *UserController) Profile() {
 
 	//获取来自页面的用户id
 	username := c.Ctx.Input.Param(":username")
-
-	//if len(username) <= 0 {
-	//	user.UserName = "drusty"
-	//} else {
-	//
-	//}
-
-
 	//已经登录账户的访问加载对应id的
 	user.UserName = username
-
-
 	//通过数据库查询该用户信息
 	user.ReadDB()
 	//将查询到的用户信息，存储到map中
@@ -48,6 +41,7 @@ func (c *UserController) Profile() {
 	c.Data["articles"] = as
 	//设置模板导向
 	c.TplName = "user/profile.html"
+
 }
 
 /**
@@ -326,9 +320,9 @@ func (c *UserController) RegisterUserUpLoadImg() {
 
 	if err == nil {
 		//图片上传成功
-		img := "http://pax6k3826.bkt.clouddn.com/" + filename
+		img := filename
 
-		c.Data["img"] = img
+		c.Data["img"] = qiuNiuUrl + img
 
 		c.TplName = "user/register.html"
 
@@ -340,6 +334,37 @@ func (c *UserController) RegisterUserUpLoadImg() {
 		c.ret.Content = err
 		c.Data["json"] = c.ret
 		c.ServeJSON()
+	}
+
+}
+
+/**
+ * 替换头像
+ */
+
+func (c *UserController) ResetUserLogoImg() {
+
+	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
+
+	filename := h.Filename
+
+	f.Close() //关闭上传的文件，不然的话会出现临时文件不能清除的情况
+
+	c.SaveToFile("imgFiles", path.Join("static/img", filename))
+
+	rest := strings.Split(user.LogoImgUrl, qiuNiuUrl)
+
+	err := class.CoversimeUploadFile(rest[1], filename)
+
+	if err != nil {
+		//图片替换成功
+		fmt.Println(err)
+		c.ret.Ok = false
+		c.ret.Content = err
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	} else {
+		c.TplName = "user/setting.html"
 	}
 
 }
