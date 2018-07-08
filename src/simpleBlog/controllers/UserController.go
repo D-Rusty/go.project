@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"path"
 	"strings"
+	"github.com/russross/blackfriday"
 )
 
 type UserController struct {
@@ -37,6 +38,15 @@ func (c *UserController) Profile() {
 	c.Data["u"] = user
 	//查询和该用户相关的文章
 	as := class.Article{}.QueryAllArticle()
+
+	//将文章对应的tag建立关联
+	for i := range as {
+
+		if len(as[i].Content) > 0 {
+			as[i].Content = string(blackfriday.MarkdownCommon([]byte(as[i].Content)))
+		}
+	}
+
 	//文章列表数据保存到map中
 	c.Data["articles"] = as
 	//设置模板导向
@@ -113,7 +123,7 @@ func (c *UserController) Register() {
 		user.UserName = username
 		user.Nick = nick
 		user.Describe = describe
-		user.Hobby = hobby
+		user.About = hobby
 		user.Email = email
 		user.Password = class.PwGen(pwd1)
 
@@ -244,7 +254,7 @@ func (c *UserController) SettingInfo() {
 	user.Nick = c.GetString("nick")
 	user.Email = c.GetString("email")
 	user.Describe = c.GetString("describe")
-	user.Hobby = c.GetString("hobby")
+	user.About = c.GetString("hobby")
 
 	err := user.Update()
 

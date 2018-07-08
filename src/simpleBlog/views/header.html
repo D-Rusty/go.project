@@ -1,15 +1,77 @@
-<header>
-    <nav class="navbox">
-        <span class="pull-right">
+<header id="site_header" class="header">
+
+    <!--头像，以及作者信息-->
+    <div class="author_info">
+        <!--头像-->
+        <div class="avatar">
+            <a href="/" title="首页">
+                <img src="{{.user.LogoImgUrl}}" alt="{{.user.Nick}}">
+            </a>
+        </div>
+        <div class="site-title-block">
+            <h1 class="site-title">
+                <a href="/" title="首页">{{.user.Nick}}</a>
+            </h1>
+            <p>
+            {{.user.Describe}}
+            </p>
+        </div>
+
+
+        <ul class="social-links">
+            <li>
+                <a href="https://github.com/D-Rusty" title="GitHub" target="_blank">
+                    <img src="/static/img/github.png"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="site-nav">
+        <ul id="nav" class="site-main-menu">
+            <li>
+                <a href="/" title><img src="/static/img/homepage.png"/>首页</a>
+            </li>
+
+            <li>
+
+                <a href="/tags" title><img src="/static/img/tags.png"/>标签</a>
+            </li>
+
+            <li>
+                <a href="/archive" title><img src="/static/img/cator.png"/>归档</a>
+            </li>
+
+            <li>
+                <a href="https://github.com/D-Rusty" title><img src="/static/img/about.png"/>关于</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="site-nav">
+        <ul id="nav" class="site-main-menu">
         {{if .user}}
-            <a href="/user/{{.user.UserName}}">我的主页</a>
-        <a href="/setting">设置中心</a>
-                 <a href="/article/new">发表文章</a>
-        <a href="/logout">退出</a>
+            <li>
+                <a href="/article/new" title>发表文章</a>
+            </li>
+
+            <li>
+                <a href="/setting" title>设置中心</a>
+            </li>
+
+            <li>
+                <a href="/logout" title>退出</a>
+            </li>
         {{else}}
-            <a href="/login">登录</a>
-                <a href="/register">注册</a>
+            <li>
+                <a href="/login" title>登录</a>
+            </li>
+
+            <li>
+                <a href="/register" title>注册</a>
+            </li>
         {{end}}
-        </span>
-    </nav>
+        </ul>
+    </div>
+
 </header>

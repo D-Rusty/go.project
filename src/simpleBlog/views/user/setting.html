@@ -5,122 +5,124 @@
 
 {{template "head.html" .}}
 </head>
-<body>
+<body class="book-page">
+<div class="wrapper">
 
 {{template "header.html" .}}
+    <div id="main" class="site-main-article">
+        <div>
+            <div class="container" style="margin-left: -40px">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" class="active">
+                            <a href="#userinfo" role="tab" data-toggle="tab">基本信息</a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#userlogo" role="tab" data-toggle="tab">头像设置</a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#account" role="tab" data-toggle="tab">安全中心</a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#userinfo" role="tab" data-toggle="tab"></a>
+                        </li>
 
-<div id="wrap">
-    <div class="container">
-
-        <div class="col-md-3">
-            <ul class="nav nav-pills nav-stacked">
-                <li role="presentation" class="active">
-                    <a href="#userinfo" role="tab" data-toggle="tab">基本信息</a>
-                </li>
-                <li role="presentation" class="">
-                    <a href="#userlogo" role="tab" data-toggle="tab">头像设置</a>
-                </li>
-                <li role="presentation" class="">
-                    <a href="#account" role="tab" data-toggle="tab">安全中心</a>
-                </li>
-                <li role="presentation" class="">
-                    <a href="#userinfo" role="tab" data-toggle="tab"></a>
-                </li>
-
-            </ul>
-        </div>
-        <div class="col-md-7">
-            <div class="tab-content">
-                <div role="tapanel" class="tab-pane active" id="userinfo">
-                    <h2>基本信息</h2>
-                    <hr>
-                    <form action="/settinginfo" method="post">
-                        <div class="form-group">
-                            <label>UserName</label>
-                            <input class="form-control" value="{{.user.UserName}}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Nick</label>
-                            <input class="form-control" name="nick" value="{{.user.Nick}}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>describe</label>
-                            <input class="form-control" name="describe" value="{{.user.Describe}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Hobby</label>
-                            <input class="form-control" name="hobby" value="{{.user.Hobby}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input class="form-control" name="email" type="email" value="{{.user.Email}}">
-                        </div>
-
-                        <input type="submit" class="btn btn-default">
-                    </form>
+                    </ul>
                 </div>
-                <div role="tapanel" class="tab-pane" id="account">
-                    <h2>密码修改</h2>
-                    <hr>
-                    <form action="/settingpwd" method="post">
-                        <div class="form-group">
-                            <label>User</label>
-                            <input class="form-control" value="{{.user.Nick}}" readonly>
+                <div class="col-md-7">
+                    <div class="tab-content">
+                        <div role="tapanel" class="tab-pane active" id="userinfo">
+                            <h2>基本信息</h2>
+                            <hr>
+                            <form action="/settinginfo" method="post">
+                                <div class="form-group">
+                                    <label>UserName</label>
+                                    <input class="form-control" value="{{.user.UserName}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nick</label>
+                                    <input class="form-control" name="nick" value="{{.user.Nick}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>describe</label>
+                                    <input class="form-control" name="describe" value="{{.user.Describe}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>About</label>
+                                    <input class="form-control" name="hobby" value="{{.user.About}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input class="form-control" name="email" type="email" value="{{.user.Email}}">
+                                </div>
+
+                                <input type="submit" class="btn btn-default">
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label>Old Password</label>
-                            <input class="form-control" name="oldpwd" value="" type="password">
+                        <div role="tapanel" class="tab-pane" id="account">
+                            <h2>密码修改</h2>
+                            <hr>
+                            <form action="/settingpwd" method="post">
+                                <div class="form-group">
+                                    <label>User</label>
+                                    <input class="form-control" value="{{.user.Nick}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Old Password</label>
+                                    <input class="form-control" name="oldpwd" value="" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input class="form-control" name="newpwd" value="" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirm</label>
+                                    <input class="form-control" name="confirmpwd" value="" type="password">
+                                </div>
+                                <input type="submit" class="btn btn-default">
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label>New Password</label>
-                            <input class="form-control" name="newpwd" value="" type="password">
+                        <div role="tapanel" class="tab-pane" id="userlogo">
+                            <h2>头像设置</h2>
+                            <hr>
+                            <img src="{{.user.LogoImgUrl}}" width="90px" height="90px" id="logo">
+                            <form id="upload" action="/file/resetLogoImg" enctype="multipart/form-data" method="post">
+                                <input type="file" name="imgFiles"/>
+                                <input type="submit"/>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label>Confirm</label>
-                            <input class="form-control" name="confirmpwd" value="" type="password">
-                        </div>
-                        <input type="submit" class="btn btn-default">
-                    </form>
-                </div>
-                <div role="tapanel" class="tab-pane" id="userlogo">
-                    <h2>头像设置</h2>
-                    <hr>
-                    <img src="{{.user.LogoImgUrl}}" width="90px" height="90px" id="logo">
-                    <form id="upload" action="/file/resetLogoImg" enctype="multipart/form-data" method="post">
-                        <input type="file" name="imgFiles"/>
-                        <input type="submit"/>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <script type="text/javascript">
+        $('form').bind('submit', function () {
+
+            var action = this.action
+
+            if (!action.includes("/file/resetLogoImg")) {
+                var tmp = ajaxSubmit(this, function () {
+
+                    if (action.includes("/settingpwd")) {
+                        location.href = "/login"
+                    }
+
+                    if (action.toString().includes("/seetinginfo")) {
+                        this.reload()
+                    }
+
+                })
+                return false;
+            }
+
+        })
+
+
+    </script>
 </div>
-
-<script type="text/javascript">
-    $('form').bind('submit', function () {
-
-        var action = this.action
-
-        if (!action.includes("/file/resetLogoImg")) {
-            var tmp = ajaxSubmit(this, function () {
-
-                if (action.includes("/settingpwd")) {
-                    location.href = "/login"
-                }
-
-                if (action.toString().includes("/seetinginfo")) {
-                    this.reload()
-                }
-
-            })
-            return false;
-        }
-
-    })
-
-
-</script>
-
 </body>
 </html>

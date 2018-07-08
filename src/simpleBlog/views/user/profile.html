@@ -1,59 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>首页</title>
 {{template "head.html"}}
-
-
 </head>
-<body>
+<body class="book-page">
 
+<div class="wrapper">
 {{template "header.html" .}}
+
+{{range $index,$value := .articles}}
+    <div id="main" class="site-main">
+        <div class="post-block">
+            <header class="post-header">
+                <h2 class="post-title">
+                    <a href="/article/{{$value.Id}}">{{$value.Title}}</a>
+                </h2>
+            </header>
+            <div class="post-body">
+                <p>{{str2html $value.Content}}<br></p>
+            </div>
+            <div class="post-button">
+                <div class="post-meta">
+                    <span>
+                        <span>createTime: </span>
+                        <time title="Post created" datetime="2018-07-07">{{$value.Time}}</time>
+                    </span>
+                    <span>
+                        <span class="post-meta-divider">|</span>
+                         <span>Author:</span>
+                        <span>
+                            <a href="" rel="index">
+                                <span>{{$value.Author.Nick}}</span>
+                            </a>
+                        </span>
+                    </span>
+                    <span class="post-meta-divider">|</span>
+                    <a class="btn" href="/article/{{$value.Id}}">Read more »</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{{end}}
+</div>
+
 
 <div id="wrap">
     <div class="container">
-        <div class="col-sm-3">
-            <div class="text-center">
-            {{template "user_status.html" .}}
-                <!--模板函数-->
-                <h4>Hobby</h4>
-                <div>
-                {{$hobbys :=  split .u.Hobby "," }}
-                {{range $hobbys}}
-                    <a class="btn btn-xs btn-success">{{.}}</a>
-                {{end}}
-                </div>
+    {{/*<div class="col-sm-3">*/}}
+    {{/*<div class="text-center">*/}}
+    {{/*<!--模板函数-->*/}}
+    {{/*<h4>Hobby</h4>*/}}
+    {{/*<div>*/}}
+    {{/*{{$hobbys :=  split .u.Hobby "," }}*/}}
+    {{/*{{range $hobbys}}*/}}
+    {{/*<a class="btn btn-xs btn-success">{{.}}</a>*/}}
+    {{/*{{end}}*/}}
+    {{/*</div>*/}}
 
-                <h4>文章标签</h4>
-                <div>...</div>
-            </div>
-        </div>
-        <div class="col-sm-9">
-            <div>
-            {{range $index,$value := .articles}}
+    {{/*<h4>文章标签</h4>*/}}
+    {{/*<div>...</div>*/}}
+    {{/*</div>*/}}
+    {{/*</div>*/}}
 
-                <div>
-                    <h2><a href="/article/{{$value.Id}}">{{$value.Title}}</a></h2>
 
-                    <div>
-                        <span>{{$value.Time}}</span>
 
-                    {{if $.user}}
-                    {{if eq $value.Author.UId $.user.UId}}
-                        <span class="pull-right">
-									<a href="/article/edit/{{$value.Id}}">编辑</a> |
-									<a href="/article/del/{{$value.Id}}">删除</a>
-								</span>
-                    {{end}}
-                    {{end}}
-                    </div>
-                    <div>
-                        <pre>{{$value.Content}}</pre>
-                    </div>
-                </div>
-            {{end}}
-            </div>
-        </div>
+
+        {{/*<div class="col-sm-9">*/}}
+            {{/*<div>*/}}
+            {{/*{{range $index,$value := .articles}}*/}}
+
+                {{/*<div>*/}}
+                    {{/*<h2><a href="/article/{{$value.Id}}">{{$value.Title}}</a></h2>*/}}
+
+                    {{/*<div>*/}}
+                        {{/*<span>{{$value.Time}}</span>*/}}
+
+
+                    {{/*{{end}}*/}}
+                    {{/*</div>*/}}
+                    {{/*<div>*/}}
+                        {{/*<pre>{{$value.Content}}</pre>*/}}
+                    {{/*</div>*/}}
+                {{/*</div>*/}}
+            {{/*{{end}}*/}}
+            {{/*</div>*/}}
+        {{/*</div>*/}}
 
     </div>
 </div>

@@ -8,8 +8,6 @@ import (
 )
 
 func init() {
-	//注册模板函数
-	beego.AddFuncMap("split", SplitHobby)
 }
 
 func main() {

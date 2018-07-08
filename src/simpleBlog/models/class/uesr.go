@@ -20,7 +20,7 @@ type User struct {
 	Nick       string                         //别名
 	LogoImgUrl string                         //个人头像
 	Describe   string                         //个人描述
-	Hobby      string    `orm:"null"`         //兴趣爱好
+	About      string    `orm:"null"`         //兴趣爱好
 	Email      string    `orm:"unique"`       //邮箱地址
 	Password   string                         //登录密码
 	PostNum    int                            //文章数量
@@ -54,7 +54,7 @@ func InitData() {
 		Nick:       "白开水",
 		LogoImgUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529722737856&di=d5c76addc8b84d0de0457327268e2c1c&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2F201509%2F23%2F140610ebbookekbr1qbte1.jpg",
 		Describe:   "个人博客",
-		Hobby:      "爬山，游泳",
+		About:      "爬山，游泳",
 		Email:      "onepice2014@sina.com",
 		Password:   PwGen("123456"),
 		PostNum:    0,

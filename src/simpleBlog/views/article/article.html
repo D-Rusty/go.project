@@ -2,96 +2,118 @@
 <html>
 <head>
     <title>{{.article.Title}} - {{.article.Author.Nick}}</title>
-
 {{template "head.html" .}}
-
-    <style type="text/css">
-        .reply-box .reply-box {
-            margin-left: 50px;
-        }
-    </style>
 </head>
-<body>
+<body class="book-page">
+<div class="wrapper">
 {{template "header.html" .}}
 
+    <div id="main" class="site-main-article">
+
+        <div class="container">
+
+            <header class="post-header" style="width: 79%;">
+
+                <h2 class="post-title">
+                    <a href="/article/{{.article.Id}}">{{.article.Title}}</a>
+                </h2>
 
 
-<div id="wrap">
-    <div class="container">
-        <div class="col-sm-8">
-            <h2>{{.article.Title}}</h2>
-            <p>
-                <a href="/user/{{.article.Author.Nick}}">{{.article.Author.Nick}}</a>
-
-                <span>{{.article.Time}}</span>
-
-                <span>
-                {{ if $.user}}
-                {{if eq .article.Author.UId $.user.UId}}
-                    <span class="pull-right">
-								<a href="/article/edit/{{.article.Id}}">编辑</a>
-							</span>
-                {{end}}
-                {{end}}
+                <div style="float: left">
+                     <span>
+                        <span>创建时间: </span>
+                        <time title="Post created" datetime="2018-07-07">2018-07-07</time>
+                    </span>
+                    <span>
+                        <span class="post-meta-divider">|</span>
+                         <span>Author:</span>
+                        <span>
+                            <a href="" rel="index">
+                                <span>{{.article.Author.Nick}}</span>
+                            </a>
+                        </span>
                 </span>
+                </div>
 
-            </p>
+                <div style="margin-left: 45px;display: inline">
+                    <!--标签-->
+                    <span>标签：</span>
+                {{range .article.Tags}}
+                    <a href="/article/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
+                {{end}}
+                </div>
+
+
+                <div style="display: inline;float: right">
+                {{if $.user}}
+                {{if eq $.article.Author.UId $.user.UId}}
+                    <span>
+                <a href="/article/edit/{{$.article.Id}}">编辑</a> |
+                <a href="/article/del/{{$.article.Id}}">删除</a>
+                </span>
+                {{end}}
+                {{end}}
+                </div>
+
+            </header>
+
+
             <div>
 
-
-               {{str2html .bodyContent}}
+            {{str2html .bodyContent}}
 
             </div>
 
-            <div class="col-sm-3">
-                <h4>本文标签</h4>
-            {{range .article.Tags}}
-                <a href="/article/archive?tag={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
-            {{end}}
-            </div>
+            <div style="border-top:0.5px black dashed;margin-top: 30px;width: 79%"/>
+
+
+            <p style="margin-bottom: 45px;margin-top: 45px; text-align: center">文章尽头</p>
+
+
         </div>
+
     </div>
     <div id="container"></div>
-    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-    <script>
-        var gitment = new Gitment({
-            id: window.location.pathname,
-            owner: 'D-Rusty',
-            repo: 'go.project',
-            oauth: {
-                client_id: '3d7b3da48fb59d92c699',
-                client_secret: 'fbc1bf4a12e6f8c77b0549a25fae1bfadf98f933',
-            },
-        })
-        gitment.render('container')
-    </script>
-    <script type="text/javascript">
+</div>
 
-        function bindParent(id, nick) {
-            console.log(id, nick)
-            $("[name=parent_id]").val(id);
-            $("[name=content]").val('@' + nick + ' ').focus();
-        }
+</div>
 
-        $("a[data-reply]").click(function () {
-            console.log($(this).data('reply'), $(this).data('user'))
-            bindParent($(this).data('reply'), $(this).data('user'));
+<script>
+    var gitment = new Gitment({
+        id: window.location.pathname,
+        owner: 'D-Rusty',
+        repo: 'go.project',
+        oauth: {
+            client_id: '3d7b3da48fb59d92c699',
+            client_secret: 'fbc1bf4a12e6f8c77b0549a25fae1bfadf98f933',
+        },
+    })
+    gitment.render('container')
+
+
+    function bindParent(id, nick) {
+        console.log(id, nick)
+        $("[name=parent_id]").val(id);
+        $("[name=content]").val('@' + nick + ' ').focus();
+    }
+
+    $("a[data-reply]").click(function () {
+        console.log($(this).data('reply'), $(this).data('user'))
+        bindParent($(this).data('reply'), $(this).data('user'));
+    });
+
+    $("form").bind("submit", function () {
+        var tmp = ajaxSubmit(this, function () {
+            var ok = tmp.responseJSON.success;
+            if (ok == true) {
+                alert("创建评论成功");
+                location.reload();
+            } else {
+                alert(tmp.responseJSON.content)
+            }
         });
-
-        $("form").bind("submit", function () {
-            var tmp = ajaxSubmit(this, function () {
-                var ok = tmp.responseJSON.success;
-                if (ok == true) {
-                    alert("创建评论成功");
-                    location.reload();
-                } else {
-                    alert(tmp.responseJSON.content)
-                }
-            });
-            return false;
-        })
-    </script>
-
+        return false;
+    })
+</script>
 </body>
 </html>

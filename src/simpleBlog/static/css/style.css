@@ -1,19 +1,299 @@
-nav.navbox {
-    box-shadow: 0px 2px 4px #ccc;
+.book-page {
+    color: #999999;
+    font-size: 14px;
+    line-height: 1.6;
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #999999;
 }
 
-nav.navbox a {
+.wrapper {
+    /**
+     定位方式
+     */
+    position: relative;
+    height: 100%;
+    background-color: transparent;
+}
+
+a {
+    color: #555;
     text-decoration: none;
+    outline: none;
+    word-wrap: break-word;
+    background-color: transparent;
+
+}
+
+.header {
+    position: fixed;
+    width: 20%;
+    height: 100%;
+    background-color: transparent;
+    padding-left: 10px;
+    overflow: auto;
+}
+
+.author_info {
+    margin-bottom: 15%;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+}
+
+/**
+ * 头像
+ */
+.avatar {
+    position: relative;
+    z-index: 0;
+    margin: 30px auto 20px;
+    max-width: 110px;
+    text-align: center;
+}
+
+/**
+ * 头像-图片
+ */
+.avatar img {
+    position: relative;
+    border: 1px solid #e5e5e5;
+    border-radius: 200px;
+    width: 120px;
+    height: 120px;
+}
+
+.avatar a:hover {
+    text-decoration: none;
+}
+
+.site-title {
+    margin: 15px 0 15px 0;
+    color: #222;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.1em;
+}
+
+.site-title a {
+    color: #222;
+}
+
+.site-title a:hover {
+    border-bottom: 1px solid #999;
+}
+
+.site-title-block {
+    position: relative;
+    z-index: 1;
+    margin: 20px 20px 10px;
+    text-align: center;
+}
+
+.site-title-block .site-description {
+    display: none;
+}
+
+.site-nav {
+    display: block;
+    margin-top: -25px;
+    margin-bottom: 45px;
+    background-color: #ffffff;
+    padding: 15px 0 30px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+}
+
+.site-nav-controll {
+    display: block;
+    margin-top: -25px;
+    background-color: #ffffff;
+    width: 22%;
+    padding: 15px 0 30px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+}
+
+.site-main {
+    height: 100%;
+    margin-left: 22.5%;
+    position: relative;
+    background-color: transparent;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+}
+
+.site-main-menu {
+    display: block;
+    padding: 0;
+    margin: 0
+}
+
+.site-main-menu li {
+    display: block;
+    position: relative;
+    padding: 0;
+    text-align: center
+}
+
+.site-main-menu li a, .site-main-menu li a:hover {
+    display: block;
+    position: relative;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    color: #222;
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+    text-decoration: none;
+    outline: none;
+    border-bottom: 1px solid #fcfcfc;
+}
+
+.site-main-menu li a img {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+}
+
+.site-main-menu li a:hover, .site-main-menu li.active a {
+    background-color: #fcfcfc
+}
+
+.site-main-menu li a:hover:after, .site-main-menu li.active a:after {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    content: '';
+    width: 3px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: orange;
+}
+
+.post-block {
+    margin-bottom: 12px;
+    background: #fff;
+    padding: 40px 40px 20px 40px;
+    height: auto;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+    opacity: 1;
+    display: block
+}
+
+.post-header {
+    position: relative;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    transition-property: border;
+    border-bottom: 1px dashed #ccc;
+    opacity: 1;
+    display: block;
+    transform: translateY(0px);
+}
+
+.post-title {
+    margin-left: 60px;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    line-height: inherit;
+}
+
+.post-title a {
     display: inline-block;
-    padding: 12px;
-    color: #000;
+    position: relative;
+    color: #555;
+    line-height: 1.2;
+    vertical-align: top;
 }
 
-nav.navbox a:hover, nav.navbox a.active {
-    background: #eee;
+.post-title a :hover {
+    border-bottom: 1px solid red;
 }
 
-.circle--square{
-    border-radius:50%;
+.post-body {
+    text-align: left;
+    opacity: 1;
+    display: block;
+    transform: translateY(0px);
+    margin: 40px;
 }
 
+.post-button {
+    margin-top: 50px;
+    text-align: right;
+}
+
+post-meta {
+    margin: 3px 0 60px 0;
+    color: #999;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+.post-button .btn {
+    color: #555;
+    font-size: 14px;
+    border-radius: 2px;
+    line-height: 2;
+    margin: 0 4px 8px 4px;
+}
+
+.post-meta-item-text {
+    display: none;
+}
+
+.post-meta-divider {
+    margin: 0 0.5em;
+}
+
+.social-links {
+    display: block;
+    margin: 40px 0 0;
+    padding: 0;
+    text-align: center;
+}
+
+.social-links li {
+    list-style-type: none;
+}
+
+.social-links li img {
+    text-align: center;
+    width: 25px;
+    height: 25px;
+}
+
+.site-main-article {
+    height: 100%;
+    margin-left: 21.5%;
+    position: relative;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+    padding: 40px;
+    margin-right: 10px;
+    margin-top: 10px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+    background-color: white;
+}
+
+/*.a-tag {*/
+    /*font-size: 1em;*/
+    /*font-weight: bold;*/
+    /*display: inline-block;*/
+    /*text-align: center;*/
+/*}*/

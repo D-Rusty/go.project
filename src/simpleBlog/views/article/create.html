@@ -28,6 +28,7 @@
             font-size: 14px;
             font-family: 'Monaco', courier, monospace;
             padding: 20px;
+            border-radius: 10px 10px 10px 10px;
         }
 
         code {
@@ -37,47 +38,63 @@
 
 {{template "head.html" .}}
 </head>
-<body>
+<body class="book-page">
+<div class="wrapper">
 {{template "header.html" .}}
 
-<div id="editor">
-    <form method="post" action="/article/new">
-        <textarea name="content" :value="input" @input="update"></textarea>
-        <div v-html="compiledMarkdown"></div>
-        <input class="btn btn-default" type="submit">
-    </form>
-</div>
-<script type="text/javascript">
-    new Vue({
-        el: '#editor',
-        data: {
-            input: '# hello'
-        },
-        computed: {
-            compiledMarkdown: function () {
-                return marked(this.input, {sanitize: true})
-            }
-        },
-        methods: {
-            update: _.debounce(function (e) {
-                this.input = e.target.value
-            }, 300)
-        }
-    })
-</script>
 
-<script type="text/javascript">
-    $('form').bind('submit', function () {
-        var tmp = ajaxSubmit(this, function () {
-            if (tmp.responseJSON.success == true) {
-                alert("成功")
-                location.href = '/article/' + tmp.responseJSON.content
-            } else {
-                alert(tmp.responseJSON.content)
+
+    <div id="main" class="site-main-article" style="padding: 0px;position: relative">
+
+        <div id="editor">
+            <form method="post" action="/article/new">
+                <input type="submit" style="
+    display:block;
+	bottom:120px;
+	right:1px!important;
+	border-radius: 10px 10px 10px 10px;
+	margin-right: 120px;
+	position:fixed;
+	background-color: orange;
+	color:#fff;
+	cursor: pointer;">
+                <textarea name="content" :value="input" @input="update"></textarea>
+                <div v-html="compiledMarkdown"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        new Vue({
+            el: '#editor',
+            data: {
+                input: '# hello'
+            },
+            computed: {
+                compiledMarkdown: function () {
+                    return marked(this.input, {sanitize: true})
+                }
+            },
+            methods: {
+                update: _.debounce(function (e) {
+                    this.input = e.target.value
+                }, 300)
             }
         })
-        return false;
-    })
-</script>
+
+        $('form').bind('submit', function () {
+            var tmp = ajaxSubmit(this, function () {
+                if (tmp.responseJSON.success == true) {
+                    alert("成功")
+                    location.href = '/article/' + tmp.responseJSON.content
+                } else {
+                    alert(tmp.responseJSON.content)
+                }
+            })
+            return false;
+        })
+    </script>
+</div>
 </body>
 </html>
