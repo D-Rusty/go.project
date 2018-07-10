@@ -1,24 +1,26 @@
-<header id="site_header" class="header">
+<header id="indirect_header" class="indirect-warp">
 
+
+{{if .user}}
     <!--头像，以及作者信息-->
-    <div class="author_info">
+    <div class="indirect-author-info">
         <!--头像-->
         <div class="avatar">
             <a href="/" title="首页">
-                <img src="{{.user.LogoImgUrl}}" alt="{{.user.Nick}}">
+                <img src="{{.user.LogoImgUrl}}" alt="{{.user.UserName}}">
             </a>
         </div>
-        <div class="site-title-block">
-            <h1 class="site-title">
-                <a href="/" title="首页">{{.user.Nick}}</a>
+        <!--作者名称以及描述-->
+        <div class="indirect-author-name-des">
+            <h1 class="indirect-author-name">
+                <a href="/" title="首页">{{.user.UserName}}</a>
             </h1>
             <p>
             {{.user.Describe}}
             </p>
         </div>
-
-
-        <ul class="social-links">
+        <!--github 等外链-->
+        <ul class="indirect-social-links">
             <li>
                 <a href="https://github.com/D-Rusty" title="GitHub" target="_blank">
                     <img src="/static/img/github.png"/>
@@ -26,9 +28,11 @@
             </li>
         </ul>
     </div>
+{{end}}
 
-    <div class="site-nav">
-        <ul id="nav" class="site-main-menu">
+    <!--页面导航栏-->
+    <div class="indirect-function-site">
+        <ul class="indirect-function-site-menu">
             <li>
                 <a href="/" title><img src="/static/img/homepage.png"/>首页</a>
             </li>
@@ -48,8 +52,10 @@
         </ul>
     </div>
 
-    <div class="site-nav">
-        <ul id="nav" class="site-main-menu">
+
+    <!--功能服务栏-->
+    <div class="indirect-function-site">
+        <ul class="indirect-function-site-menu">
         {{if .user}}
             <li>
                 <a href="/article/new" title>发表文章</a>
@@ -64,14 +70,86 @@
             </li>
         {{else}}
             <li>
-                <a href="/login" title>登录</a>
+                <a id="login" href="javascript:;" title>登录</a>
             </li>
 
             <li>
-                <a href="/register" title>注册</a>
+                <a id="register" href="javascript:;" title>注册</a>
             </li>
         {{end}}
         </ul>
     </div>
 
+
 </header>
+
+
+{{template "/user/login.html"}}
+
+{{template "/user/register.html"}}
+
+
+<script>
+    window.onload = function () {
+
+        /*公共遮挡图层*/
+        var oOver = document.getElementById("over")
+
+        /**
+         * 登录弹窗的显示
+         * */
+        var oLogin = document.getElementById("login")
+        var oLoginBox = document.getElementById("login-box")
+        oLogin.onclick = function () {
+            oLoginBox.style.display = 'block';
+            oLoginBox.style.zIndex = 1;
+            oOver.style.display = 'block'
+        }
+
+        /**
+         * 登录弹窗的隐藏
+         * */
+        var oLoginClose = document.getElementById("login-close")
+
+        oLoginClose.onclick = function () {
+            oLoginBox.style.display = 'none';
+            oLoginBox.style.zIndex = 0;
+            oOver.style.display = 'none'
+        }
+
+        /**
+         * 注册弹窗的显示
+         * */
+        var oRegister = document.getElementById("register")
+        var oRegisterBox = document.getElementById("register-box")
+
+        oRegister.onclick = function () {
+            oRegisterBox.style.display = 'block';
+            oRegisterBox.style.zIndex = 1;
+            oOver.style.display = 'none'
+        }
+
+        /**
+         * 注册弹窗的隐藏
+         * */
+        var oRegisterClose = document.getElementById("register-close")
+
+        oRegisterClose.onclick = function () {
+            oRegisterBox.style.display = 'none';
+            oRegisterBox.style.zIndex = 0;
+            oOver.style.display = 'none'
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

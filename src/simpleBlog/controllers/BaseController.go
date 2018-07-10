@@ -35,7 +35,7 @@ func (c *BaseController) DoLogin(u class.User) {
  */
 func (c *BaseController) DoLogout() {
 	c.DestroySession()
-	c.Redirect("/login", 302)
+	c.Redirect("/", 302)
 }
 
 /*
@@ -50,7 +50,7 @@ func (c *BaseController) IsLogin() bool {
  */
 func (c *BaseController) CheckLogin() {
 	if !c.IsLogin() {
-		c.Redirect("/login", 302)
+		c.Redirect("/", 302)
 		c.Abort("302")
 	}
 }

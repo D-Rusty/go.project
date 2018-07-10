@@ -6,33 +6,76 @@
 {{template "head.html" .}}
 </head>
 <body>
-<div class="col-sm-4">
-    <h2>Login</h2>
-    <div class="well">
-        <form action="/login" method="post">
-            <div class="form-group">
-                <label>User</label>
-                <input class="form-control" name="username">
-            </div>
-            <div class="=form-group">
-                <label>Password</label>
-                <input class="form-control" name="password" type="password">
-            </div>
-            <input type="submit" class="btn btn-default">
+<div id="login-box" class="login-register">
+    <img src="/static/img/persion_log.jpg" class="login-register-img">
+    <div class="login-register-header">
+        <h1>登录</h1>
+        <img id="login-close" src="/static/img/close.png" class="login-register-close"/>
+    </div>
+
+    <div class="login-register-header">
+        <form id="login_form" action="/login" method="post">
+            <input class="login-register-input" name="username" placeholder="请输入用户名">
+            <input class="login-register-input" name="password" type="password" placeholder="请输入密码">
+            <input type="submit" class="login-register-btn" name="登录" onclick="submmitLogin()">
+            <span>
+                没有账号？
+                <a href="javascript:goRegister();" title="">注册</a>
+            </span>
         </form>
     </div>
+
 </div>
+
+{{template "/user/register.html"}}
+
 <script type="text/javascript">
-    $('form').bind('submit', function () {
+
+    // /**
+    //  * 发起登录
+    //  * */
+    // function submmitLogin() {
+    //     var tmp = ajaxSubmit($("#login_form"), function () {
+    //         alert(tmp.responseJSON)
+    //         if (tmp.responseJSON.success == true) {
+    //             alert("成功")
+    //             location.href = '/'
+    //         } else {
+    //             alert(tmp.responseJSON.content)
+    //         }
+    //     })
+    // }
+
+
+
+    $('#login_form').bind('submit', function () {
         var tmp = ajaxSubmit(this, function () {
             if (tmp.responseJSON.success == true) {
                 location.href = "/user/" + tmp.responseJSON.content
+                location.reload()
             } else {
                 alert(tmp.responseJSON.content)
             }
         })
         return false
     })
+
+    /**
+     * 去注册
+     */
+    function goRegister() {
+
+        var oLoginBox = document.getElementById("login-box")
+        var oRegisterBox = document.getElementById("register-box")
+
+        oLoginBox.style.display = 'none';
+        oLoginBox.style.zIndex = 0;
+
+        oRegisterBox.style.display = 'block';
+        oRegisterBox.style.zIndex = 1;
+    }
+
+
 </script>
 </body>
 </html>

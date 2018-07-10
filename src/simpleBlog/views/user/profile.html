@@ -2,92 +2,56 @@
 <html>
 <head>
     <title>首页</title>
+    <meta cache>
 {{template "head.html"}}
 </head>
-<body class="book-page">
+<body class="body-profile">
 
-<div class="wrapper">
+<div class="body-profile-wrapper">
+
 {{template "header.html" .}}
 
-{{range $index,$value := .articles}}
-    <div id="main" class="site-main">
-        <div class="post-block">
-            <header class="post-header">
-                <h2 class="post-title">
-                    <a href="/article/{{$value.Id}}">{{$value.Title}}</a>
-                </h2>
-            </header>
-            <div class="post-body">
-                <p>{{str2html $value.Content}}<br></p>
-            </div>
-            <div class="post-button">
-                <div class="post-meta">
-                    <span>
-                        <span>createTime: </span>
-                        <time title="Post created" datetime="2018-07-07">{{$value.Time}}</time>
-                    </span>
-                    <span>
-                        <span class="post-meta-divider">|</span>
-                         <span>Author:</span>
-                        <span>
-                            <a href="" rel="index">
-                                <span>{{$value.Author.Nick}}</span>
-                            </a>
-                        </span>
-                    </span>
-                    <span class="post-meta-divider">|</span>
-                    <a class="btn" href="/article/{{$value.Id}}">Read more »</a>
-                </div>
+{{if .articles}}
 
-            </div>
+{{range $index,$value := .articles}}
+
+    <div id="main" class="article-warp">
+
+        <header class="article-title">
+            <h2>
+                <a href="/article/{{$value.Id}}">{{$value.Title}}</a>
+            </h2>
+        </header>
+
+        <span class="article-content">{{str2html $value.Content}}<br></span>
+
+        <div class="article-button">
+
+            <span>createTime: </span>
+            <time title="Post created" datetime="2018-07-07">{{$value.Time}}</time>
+            </span>
+            <span class="article-button-divider">|</span>
+            <span>Author:</span>
+            <span>
+                   <a href="" rel="index">
+                       <span>{{$value.Author.UserName}}</span>
+                   </a>
+               </span>
+            </span>
+            <span class="article-button-divider">|</span>
+            <a class="readmore" href="/article/{{$value.Id}}">Read more »</a>
+
         </div>
     </div>
 {{end}}
+{{else}}
+    <!--空白页显示-->
+{{template "empty.html"}}
+{{end}}
+
+
 </div>
 
+<div id="over" class="over"></div>
 
-<div id="wrap">
-    <div class="container">
-    {{/*<div class="col-sm-3">*/}}
-    {{/*<div class="text-center">*/}}
-    {{/*<!--模板函数-->*/}}
-    {{/*<h4>Hobby</h4>*/}}
-    {{/*<div>*/}}
-    {{/*{{$hobbys :=  split .u.Hobby "," }}*/}}
-    {{/*{{range $hobbys}}*/}}
-    {{/*<a class="btn btn-xs btn-success">{{.}}</a>*/}}
-    {{/*{{end}}*/}}
-    {{/*</div>*/}}
-
-    {{/*<h4>文章标签</h4>*/}}
-    {{/*<div>...</div>*/}}
-    {{/*</div>*/}}
-    {{/*</div>*/}}
-
-
-
-
-        {{/*<div class="col-sm-9">*/}}
-            {{/*<div>*/}}
-            {{/*{{range $index,$value := .articles}}*/}}
-
-                {{/*<div>*/}}
-                    {{/*<h2><a href="/article/{{$value.Id}}">{{$value.Title}}</a></h2>*/}}
-
-                    {{/*<div>*/}}
-                        {{/*<span>{{$value.Time}}</span>*/}}
-
-
-                    {{/*{{end}}*/}}
-                    {{/*</div>*/}}
-                    {{/*<div>*/}}
-                        {{/*<pre>{{$value.Content}}</pre>*/}}
-                    {{/*</div>*/}}
-                {{/*</div>*/}}
-            {{/*{{end}}*/}}
-            {{/*</div>*/}}
-        {{/*</div>*/}}
-
-    </div>
-</div>
 </body>

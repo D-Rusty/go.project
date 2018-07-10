@@ -1,4 +1,7 @@
-.book-page {
+/**
+  个人主页，设置中心，文章页面，创建文章页面公共的body样式
+ */
+.body-profile, .body-article, .body-setting {
     color: #999999;
     font-size: 14px;
     line-height: 1.6;
@@ -7,43 +10,47 @@
     background-color: #999999;
 }
 
-.wrapper {
+.body-profile-wrapper, .body-article-wrapper, .body-setting-wrapper {
     /**
      定位方式
      */
     position: relative;
     height: 100%;
     background-color: transparent;
-}
+    padding-top: 15px;
+    padding-right: 15px;
 
-a {
-    color: #555;
-    text-decoration: none;
-    outline: none;
-    word-wrap: break-word;
-    background-color: transparent;
-
-}
-
-.header {
-    position: fixed;
-    width: 20%;
-    height: 100%;
-    background-color: transparent;
-    padding-left: 10px;
-    overflow: auto;
-}
-
-.author_info {
-    margin-bottom: 15%;
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
 }
 
 /**
- * 头像
+ * 空白页面
+ */
+.empty-page {
+    height: 760px;
+    margin-left: 23%;
+    margin-top: 15px;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 1em;
+    color: #555;
+    background: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+    opacity: 1;
+    display: block;
+    text-align: center;
+    max-height: 100%;
+    padding-top: 15%
+
+}
+
+.empty-page img {
+    width: 95px;
+    height: 95px;
+}
+
+/**
+ * 圆角头像
  */
 .avatar {
     position: relative;
@@ -54,7 +61,7 @@ a {
 }
 
 /**
- * 头像-图片
+ * 圆角头像-图片
  */
 .avatar img {
     position: relative;
@@ -68,7 +75,55 @@ a {
     text-decoration: none;
 }
 
-.site-title {
+a {
+    color: #555;
+    text-decoration: none;
+    outline: none;
+    word-wrap: break-word;
+    background-color: transparent;
+
+}
+
+/**
+ * 用户简介栏
+ */
+
+.indirect-warp {
+    position: fixed;
+    width: 20%;
+    height: 100%;
+    background-color: transparent;
+    margin: 20px;
+    overflow: auto;
+    scrollbar-base-color: transparent;
+
+}
+
+/**
+ * 作者信息
+ */
+.indirect-author-info {
+    margin-bottom: 15px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+}
+
+/**
+ * 作者名称以及描述
+ */
+.indirect-author-name-des {
+    position: relative;
+    z-index: 1;
+    margin: 20px 20px 10px;
+    text-align: center;
+}
+
+/**
+ * 作者名称
+ */
+.indirect-author-name {
     margin: 15px 0 15px 0;
     color: #222;
     font-weight: 500;
@@ -76,71 +131,61 @@ a {
     line-height: 1.1em;
 }
 
-.site-title a {
+.indirect-author-name a {
     color: #222;
 }
 
-.site-title a:hover {
+.indirect-author-name a:hover {
     border-bottom: 1px solid #999;
 }
 
-.site-title-block {
-    position: relative;
-    z-index: 1;
-    margin: 20px 20px 10px;
+/**
+ * github等外链样式
+ */
+.indirect-social-links {
+    display: block;
+    margin: 40px 0 0;
+    padding: 0;
     text-align: center;
 }
 
-.site-title-block .site-description {
-    display: none;
+.indirect-social-links li {
+    list-style-type: none;
 }
 
-.site-nav {
+.indirect-social-links li img {
+    text-align: center;
+    width: 25px;
+    height: 25px;
+}
+
+/**
+ * 用户功能区样式
+ */
+
+.indirect-function-site {
     display: block;
-    margin-top: -25px;
-    margin-bottom: 45px;
+    margin-bottom: 15px;
     background-color: #ffffff;
     padding: 15px 0 30px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 10px 10px 10px 10px;
 }
 
-.site-nav-controll {
-    display: block;
-    margin-top: -25px;
-    background-color: #ffffff;
-    width: 22%;
-    padding: 15px 0 30px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
-}
-
-.site-main {
-    height: 100%;
-    margin-left: 22.5%;
-    position: relative;
-    background-color: transparent;
-    position: relative;
-    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
-    font-size: 14px;
-    line-height: 2;
-    color: #555;
-}
-
-.site-main-menu {
+.indirect-function-site-menu {
     display: block;
     padding: 0;
     margin: 0
 }
 
-.site-main-menu li {
+.indirect-function-site-menu li {
     display: block;
     position: relative;
     padding: 0;
     text-align: center
 }
 
-.site-main-menu li a, .site-main-menu li a:hover {
+.indirect-function-site-menu li a, .indirect-function-site-menu li a:hover {
     display: block;
     position: relative;
     padding: 10px;
@@ -155,17 +200,17 @@ a {
     border-bottom: 1px solid #fcfcfc;
 }
 
-.site-main-menu li a img {
+.indirect-function-site-menu li a img {
     width: 15px;
     height: 15px;
     margin-right: 10px;
 }
 
-.site-main-menu li a:hover, .site-main-menu li.active a {
+.indirect-function-site-menu li a:hover, .indirect-function-site-menu li.active a {
     background-color: #fcfcfc
 }
 
-.site-main-menu li a:hover:after, .site-main-menu li.active a:after {
+.indirect-function-site-menu li a:hover:after, .indirect-function-site-menu li.active a:after {
     display: block;
     position: absolute;
     right: 0;
@@ -177,18 +222,138 @@ a {
     background-color: orange;
 }
 
-.post-block {
-    margin-bottom: 12px;
-    background: #fff;
-    padding: 40px 40px 20px 40px;
+/**
+ * 登录与注册页面
+ */
+.login-register {
+    display: none;
+    width: 400px;
     height: auto;
+    background-color: white;
+    position: absolute;
+    left: 40%;
+    top: 20%;
+    margin-top: 15%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+
+}
+
+.login-register h1 {
+    display: inline;
+    color: black;
+    font-size: 1.5rem;
+}
+
+/**
+ * 关闭按钮样式
+ */
+.login-register-close {
+    display: inline;
+    float: right
+}
+
+/**
+ * 登录注册按钮样式
+ */
+.login-register-btn {
+    width: 100%;
+    position: relative;
+    height: 45px;
+    color: #fff;
+    background-color: #007fff;
+    border-radius: 2px;
+    border: 2px solid #007fff;
+    outline: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/**
+ * 标题头部
+ */
+.login-register-header {
+    margin: 65px 45px 35px 45px;
+
+}
+
+.login-register-header a {
+    color: #007fff;
+}
+
+/**
+ * 输入框
+ */
+.login-register-input, .settings-info-input{
+    margin-bottom: 10px;
+    position: relative;
+    padding: 2rem;
+    height: 45px;
+    width: 100%;
+    border: 1px solid #eeeeee;
+    max-width: 100%;
+    font-size: 1.167rem;
+    background-color: #fff;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+/**
+ * 遮罩样式
+ */
+.over {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    display: none;
+}
+
+/**
+ * 登录与注册头像
+ */
+.login-register-img {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 10rem;
+    -webkit-transform: translate(-50%, -83%);
+    transform: translate(-50%, -83%);
+    z-index: 1;
+    border-radius: 10px;
+}
+
+/**
+ * 文章主布局
+ */
+.article-warp {
+    height: 100%;
+    margin-left: 23%;
+    margin-top: 15px;
+    padding-top: 15px;
+    padding-right: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+    background: #fff;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 10px 10px 10px 10px;
     opacity: 1;
-    display: block
+    display: block;
 }
 
-.post-header {
+/***
+ * 文章标题
+ */
+.article-title {
     position: relative;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
@@ -198,9 +363,10 @@ a {
     opacity: 1;
     display: block;
     transform: translateY(0px);
+
 }
 
-.post-title {
+.article-title h2 {
     margin-left: 60px;
     font-size: 16px;
     font-weight: normal;
@@ -208,40 +374,37 @@ a {
     line-height: inherit;
 }
 
-.post-title a {
+.article-title h2 a {
     display: inline-block;
     position: relative;
     color: #555;
+    font-size: 2em;
     line-height: 1.2;
     vertical-align: top;
 }
 
-.post-title a :hover {
-    border-bottom: 1px solid red;
+.article-title h2 a :hover {
+    border-bottom: 1px solid #ccc;
 }
 
-.post-body {
-    text-align: left;
+/**
+ *文章内容
+ */
+.article-content {
     opacity: 1;
     display: block;
-    transform: translateY(0px);
-    margin: 40px;
+    background-color: transparent;
+    padding: 25px;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    transition-property: border;
+    border-bottom: 1px dashed #ccc;
 }
 
-.post-button {
-    margin-top: 50px;
-    text-align: right;
-}
-
-post-meta {
-    margin: 3px 0 60px 0;
-    color: #999;
-    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
-    font-size: 12px;
-    text-align: center;
-}
-
-.post-button .btn {
+/**
+ * 控制面板
+ */
+.article-button .readmore {
     color: #555;
     font-size: 14px;
     border-radius: 2px;
@@ -249,34 +412,21 @@ post-meta {
     margin: 0 4px 8px 4px;
 }
 
-.post-meta-item-text {
-    display: none;
+.article-button {
+    margin: 50px 0 5px 0;
+    text-align: right;
+    color: #999;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 12px;
 }
 
-.post-meta-divider {
+.article-button-divider {
     margin: 0 0.5em;
-}
-
-.social-links {
-    display: block;
-    margin: 40px 0 0;
-    padding: 0;
-    text-align: center;
-}
-
-.social-links li {
-    list-style-type: none;
-}
-
-.social-links li img {
-    text-align: center;
-    width: 25px;
-    height: 25px;
 }
 
 .site-main-article {
     height: 100%;
-    margin-left: 21.5%;
+    margin-left: 23.5%;
     position: relative;
     position: relative;
     font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -291,9 +441,115 @@ post-meta {
     background-color: white;
 }
 
-/*.a-tag {*/
-    /*font-size: 1em;*/
-    /*font-weight: bold;*/
-    /*display: inline-block;*/
-    /*text-align: center;*/
-/*}*/
+/**
+ * 设置页面主布局
+ */
+.settings-wrap {
+    height: 100%;
+    margin-left: 25%;
+    margin-top: 15px;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+    background: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+    opacity: 1;
+    display: block;
+}
+
+.settings-info-content {
+    width: 75%;
+    padding-bottom: 45px;
+    padding-left: 15px;
+}
+
+.settings-info {
+    width: 75%;
+}
+
+/**
+ * 登录注册按钮样式
+ */
+.settings-info-btn {
+    width: 75%;
+    position: relative;
+    height: 45px;
+    color: #fff;
+    background-color: #007fff;
+    border-radius: 2px;
+    border: 2px solid #007fff;
+    outline: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.header {
+
+}
+
+.site-nav-controll {
+    display: block;
+    margin-top: -25px;
+    background-color: #ffffff;
+    width: 22%;
+    padding: 15px 0 30px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+}
+
+/**
+ * 注册
+ */
+
+.register-body {
+
+    width: 400px;
+    height: auto;
+    position: absolute;
+    left: 40%;
+    top: 20%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+
+}
+
+.register-content {
+    max-width: 100%;
+    width: 45%;
+    height: auto;
+    text-align: center;
+    background-color: white;
+    margin-left: 3%;
+
+}
+
+.register-img {
+    position: relative;
+    border: 1px solid #e5e5e5;
+    border-radius: 200px;
+    width: 120px;
+    height: 120px;
+    margin: 40px;
+}
+
+.register-input-c {
+    margin-bottom: 10px;
+    padding: 2rem;
+    width: 25%;
+    height: 45px;
+    margin-left: 39%;
+    border: 1px solid #eeeeee;
+    font-size: 1.167rem;
+    background-color: #fff;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    display: table;
+}

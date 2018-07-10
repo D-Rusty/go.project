@@ -13,6 +13,7 @@ func init() {
 func main() {
 	//打开session
 	beego.BConfig.WebConfig.Session.SessionOn = true
+
 	beego.Run()
 }
 

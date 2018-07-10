@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{.article.Title}} - {{.article.Author.Nick}}</title>
+    <title>{{.article.Title}} - {{.article.Author.UserName}}</title>
 {{template "head.html" .}}
 </head>
 <body class="book-page">
@@ -12,9 +12,9 @@
 
         <div class="container">
 
-            <header class="post-header" style="width: 79%;">
+            <header class="article-title" style="width: 79%;">
 
-                <h2 class="post-title">
+                <h2 class="article-title">
                     <a href="/article/{{.article.Id}}">{{.article.Title}}</a>
                 </h2>
 
@@ -25,11 +25,11 @@
                         <time title="Post created" datetime="2018-07-07">2018-07-07</time>
                     </span>
                     <span>
-                        <span class="post-meta-divider">|</span>
+                        <span class="article-button-divider">|</span>
                          <span>Author:</span>
                         <span>
                             <a href="" rel="index">
-                                <span>{{.article.Author.Nick}}</span>
+                                <span>{{.article.Author.UserName}}</span>
                             </a>
                         </span>
                 </span>

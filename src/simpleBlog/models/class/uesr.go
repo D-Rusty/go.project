@@ -17,7 +17,6 @@ import (
 type User struct {
 	UId        string                         //id 自动增长
 	UserName   string    `orm:"pk;"`          //用户名
-	Nick       string                         //别名
 	LogoImgUrl string                         //个人头像
 	Describe   string                         //个人描述
 	About      string    `orm:"null"`         //兴趣爱好
@@ -51,7 +50,6 @@ func InitData() {
 	u := &User{
 		UId:        GenerateRandomUserId(),
 		UserName:   "drusty",
-		Nick:       "白开水",
 		LogoImgUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529722737856&di=d5c76addc8b84d0de0457327268e2c1c&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2F201509%2F23%2F140610ebbookekbr1qbte1.jpg",
 		Describe:   "个人博客",
 		About:      "爬山，游泳",

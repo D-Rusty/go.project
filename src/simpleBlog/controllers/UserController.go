@@ -6,8 +6,8 @@ import (
 	"time"
 	"fmt"
 	"path"
-	"strings"
 	"github.com/russross/blackfriday"
+	"strings"
 )
 
 type UserController struct {
@@ -47,8 +47,11 @@ func (c *UserController) Profile() {
 		}
 	}
 
-	//文章列表数据保存到map中
-	c.Data["articles"] = as
+	if len(as) > 0 {
+		//文章列表数据保存到map中
+		c.Data["articles"] = as
+	}
+
 	//设置模板导向
 	c.TplName = "user/profile.html"
 
@@ -79,9 +82,7 @@ func (c *UserController) Register() {
 	}()
 
 	username := c.GetString("username")
-	nick := c.GetString("nick")
 	describe := c.GetString("describe")
-	hobby := c.GetString("hobby")
 	email := c.GetString("email")
 	pwd1 := c.GetString("password")
 	pwd2 := c.GetString("password2")
@@ -89,15 +90,10 @@ func (c *UserController) Register() {
 	valid := validation.Validation{}
 
 	valid.Required(username, "Username")
-	valid.Required(nick, "Nick")
 
 	//验证是否传入以下参数
 	valid.Required(pwd1, "Password")
 	valid.Required(pwd2, "Password2")
-
-	//验证别名长度
-	valid.MaxSize(nick, 30, "Nick")
-	valid.MinSize(nick, 3, "Nick")
 
 	valid.MaxSize(username, 30, "Username")
 	valid.MinSize(username, 3, "Username")
@@ -119,11 +115,10 @@ func (c *UserController) Register() {
 		valid.Error("两次密码不一致")
 
 	default:
+
 		user.UId = class.GenerateRandomUserId()
 		user.UserName = username
-		user.Nick = nick
 		user.Describe = describe
-		user.About = hobby
 		user.Email = email
 		user.Password = class.PwGen(pwd1)
 
@@ -141,8 +136,9 @@ func (c *UserController) Register() {
 		default:
 			err := user.CreateDB()
 			if err == nil {
+				c.DoLogin(user)
 				c.ret.Ok = true
-				c.ret.Content = "注册成功"
+				c.ret.Content = user.UserName
 				return
 			} else {
 				valid.Error(fmt.Sprintf("%v", err))
@@ -251,7 +247,6 @@ func (c *UserController) SettingInfo() {
 	}()
 
 	user := c.GetSession("user").(class.User)
-	user.Nick = c.GetString("nick")
 	user.Email = c.GetString("email")
 	user.Describe = c.GetString("describe")
 	user.About = c.GetString("hobby")
@@ -259,6 +254,7 @@ func (c *UserController) SettingInfo() {
 	err := user.Update()
 
 	if err == nil {
+
 		c.DoLogin(user)
 		c.ret.Ok = true
 		c.ret.Content = "用户信息设置成功"
@@ -314,8 +310,8 @@ func (c *UserController) SettingPwd() {
 }
 
 /**
- * 注册上传用户头像
- */
+* 注册上传用户头像
+*/
 func (c *UserController) RegisterUserUpLoadImg() {
 
 	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
@@ -354,6 +350,8 @@ func (c *UserController) RegisterUserUpLoadImg() {
 
 func (c *UserController) ResetUserLogoImg() {
 
+	println("sdsfsffs")
+
 	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
 
 	filename := h.Filename
@@ -362,19 +360,34 @@ func (c *UserController) ResetUserLogoImg() {
 
 	c.SaveToFile("imgFiles", path.Join("static/img", filename))
 
-	rest := strings.Split(user.LogoImgUrl, qiuNiuUrl)
+	var err error
 
-	err := class.CoversimeUploadFile(rest[1], filename)
+	/*替换图片*/
+	if len(user.LogoImgUrl) > 0 {
+		rest := strings.Split(user.LogoImgUrl, qiuNiuUrl)
+		err = class.CoversimeUploadFile(rest[1], filename)
+	} else {
+		//上传图片
+		err = class.SimeUploadFile(filename)
+	}
 
-	if err != nil {
-		//图片替换成功
-		fmt.Println(err)
+	defer func() {
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	}()
+
+	if err == nil {
+		c.Data["img"] = qiuNiuUrl + filename
+		user := c.GetSession("user").(class.User)
+		user.LogoImgUrl = qiuNiuUrl + filename
+		user.Update()
+		c.DoLogin(user)
+		c.Redirect("/", 302)
+	} else {
 		c.ret.Ok = false
 		c.ret.Content = err
 		c.Data["json"] = c.ret
 		c.ServeJSON()
-	} else {
-		c.TplName = "user/setting.html"
 	}
 
 }
