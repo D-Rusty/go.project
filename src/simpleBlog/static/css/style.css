@@ -1,7 +1,7 @@
 /**
   个人主页，设置中心，文章页面，创建文章页面公共的body样式
  */
-.body-profile, .body-article, .body-setting {
+.body-profile, .body-setting {
     color: #999999;
     font-size: 14px;
     line-height: 1.6;
@@ -10,7 +10,7 @@
     background-color: #999999;
 }
 
-.body-profile-wrapper, .body-article-wrapper, .body-setting-wrapper {
+.body-profile-wrapper, .body-setting-wrapper {
     /**
      定位方式
      */
@@ -232,8 +232,7 @@ a {
     background-color: white;
     position: absolute;
     left: 40%;
-    top: 20%;
-    margin-top: 15%;
+    top: 13%;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 10px 10px 10px 10px;
 
@@ -286,7 +285,7 @@ a {
 /**
  * 输入框
  */
-.login-register-input, .settings-info-input{
+.login-register-input, .settings-info-input {
     margin-bottom: 10px;
     position: relative;
     padding: 2rem;
@@ -329,14 +328,13 @@ a {
 }
 
 /**
- * 文章主布局
+ * 设置页面主布局
  */
-.article-warp {
+.settings-wrap {
     height: 100%;
-    margin-left: 23%;
+    margin-left: 25%;
     margin-top: 15px;
     padding-top: 15px;
-    padding-right: 15px;
     margin-bottom: 15px;
     position: relative;
     font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -350,20 +348,110 @@ a {
     display: block;
 }
 
-/***
- * 文章标题
+.settings-info-content {
+    width: 75%;
+    padding-bottom: 45px;
+    padding-left: 15px;
+}
+
+.settings-info {
+    width: 75%;
+}
+
+/**
+ * 登录注册按钮样式
  */
+.settings-info-btn {
+    width: 75%;
+    position: relative;
+    height: 45px;
+    color: #fff;
+    background-color: #007fff;
+    border-radius: 2px;
+    border: 2px solid #007fff;
+    outline: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/**
+ * ===============================================================文章管理，文章相关的css样式===============================================================
+ */
+
+/*body标签样式*/
+.body-article {
+    color: #999999;
+    font-size: 14px;
+    line-height: 1.6;
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #999999;
+}
+
+/*body标签下，这个页面样式*/
+.body-article-wrapper {
+    position: relative;
+    height: 100%;
+    background-color: transparent;
+    padding-top: 15px;
+    padding-right: 15px;
+
+}
+
+/**
+ * 文章主布局
+ */
+.article-warp {
+    height: 100%;
+    margin-left: 23%;
+    margin-top: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+    background: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 10px 10px;
+    opacity: 1;
+    display: block;
+}
+
+/*文章标题*/
 .article-title {
     position: relative;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     transition-delay: 0s;
+    padding: 15px 15px 0px 15px;
+    width: 91%;
     transition-property: border;
     border-bottom: 1px dashed #ccc;
     opacity: 1;
     display: block;
     transform: translateY(0px);
 
+}
+
+/*文章详情-title*/
+.article-details-title {
+    float: left
+}
+
+/*文章详情-标签*/
+.article-details-tags {
+    margin-left: 45px;
+    display: inline
+}
+
+/*文章详情-删除与编辑*/
+.article-details-del-edit {
+    display: inline;
+    float: right
 }
 
 .article-title h2 {
@@ -424,132 +512,149 @@ a {
     margin: 0 0.5em;
 }
 
-.site-main-article {
+/*创建文章预览区*/
+
+.article-create-input-preview {
     height: 100%;
-    margin-left: 23.5%;
-    position: relative;
-    position: relative;
-    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
-    font-size: 14px;
-    line-height: 2;
-    color: #555;
-    padding: 40px;
-    margin-right: 10px;
-    margin-top: 10px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    width: 97%;
+    vertical-align: top;
+    box-sizing: border-box;
+    display: inline-block;
     background-color: white;
+    margin-left: 25px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
-/**
- * 设置页面主布局
- */
-.settings-wrap {
-    height: 100%;
-    margin-left: 25%;
-    margin-top: 15px;
-    padding-top: 15px;
-    margin-bottom: 15px;
-    position: relative;
-    font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
-    font-size: 14px;
-    line-height: 2;
-    color: #555;
-    background: #fff;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
-    opacity: 1;
-    display: block;
-}
-
-.settings-info-content {
-    width: 75%;
-    padding-bottom: 45px;
-    padding-left: 15px;
-}
-
-.settings-info {
-    width: 75%;
-}
-
-/**
- * 登录注册按钮样式
- */
-.settings-info-btn {
-    width: 75%;
-    position: relative;
-    height: 45px;
-    color: #fff;
-    background-color: #007fff;
-    border-radius: 2px;
-    border: 2px solid #007fff;
+/*创建文章内容输入区*/
+.article-create-input-content {
+    border: none;
+    border-right: 1px solid #ccc;
+    resize: none;
     outline: none;
+    background-color: #e8e8e8;
+    font-size: 14px;
+    font-family: 'Monaco', courier, monospace;
+    display: inline;
+    width: 49%;
+    height: 93.5%;
+    padding: 15px 20px;
+    margin-right: 20px;
+    vertical-align: top;
     box-sizing: border-box;
-    cursor: pointer;
-    margin-top: 10px;
-    margin-bottom: 15px;
-}
-
-.header {
 
 }
 
-.site-nav-controll {
+/** 创建文章标题栏*/
+.article-create-title {
+    width: 100%;
+    border: none;
+    height: 45px;
+    margin-bottom: 0.5px;
+    display: inline-block;
+    font-size: 18px;
+    padding: 15px;
+    color: black;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eeeeee;
+}
+
+/** 创建文章提交按钮*/
+.article-create-btn {
     display: block;
-    margin-top: -25px;
-    background-color: #ffffff;
-    width: 22%;
-    padding: 15px 0 30px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
+    bottom: 120px;
+    right: 1px !important;
+    margin-right: 120px;
+    position: fixed;
+    background: url("../../static/img/push.png") 0 0 transparent;
+    border: none;
+    width: 45px;
+    height: 45px;
+    color: transparent;
 }
 
 /**
- * 注册
- */
-
-.register-body {
-
-    width: 400px;
-    height: auto;
-    position: absolute;
-    left: 40%;
-    top: 20%;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px 10px 10px 10px;
-
-}
-
-.register-content {
-    max-width: 100%;
-    width: 45%;
-    height: auto;
+ *标签页面
+ **/
+/*头部*/
+.tags-header {
     text-align: center;
-    background-color: white;
-    margin-left: 3%;
-
-}
-
-.register-img {
-    position: relative;
-    border: 1px solid #e5e5e5;
-    border-radius: 200px;
-    width: 120px;
-    height: 120px;
     margin: 40px;
+    font-size: 30px
 }
 
-.register-input-c {
-    margin-bottom: 10px;
-    padding: 2rem;
-    width: 25%;
-    height: 45px;
-    margin-left: 39%;
-    border: 1px solid #eeeeee;
-    font-size: 1.167rem;
-    background-color: #fff;
-    border-radius: 2px;
-    box-sizing: border-box;
-
-    display: table;
+/*标签数量*/
+.tags-header-total {
+    text-align: center;
+    font-size: 15px;
+    padding-bottom: 45px;
+    border-bottom: 1px solid #E7E7E7
 }
+
+/*标签数量*/
+.tags-list {
+    text-align: center;
+    display: inline-grid;
+}
+
+.tagslist a {
+    margin: 15px;
+    border-bottom: 1px solid;
+}
+
+/*标签详情页面*/
+.tagsdetails-header {
+    display: inline
+}
+
+.tagsdetails-header p {
+    font-size: 3em;
+    padding-left: 25px;
+    font-weight: bold;
+    display: inline
+}
+
+.tagsdetails-header h4 {
+    display: inline
+}
+
+.tagsdetails-header h4 {
+    display: inline
+}
+
+.tagsdetails-timeline ul li {
+    list-style-type: none;
+    position: relative;
+    width: 91%;
+    background-color: transparent;
+    display: block;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 1px;
+    border-left: 1px solid #e8e8e8;
+    border-bottom: 1px dashed #999999;
+}
+
+.tagsdetails-timeline-content {
+    display: inline;
+}
+
+.tagsdetails-timeline-content view {
+    width: 10px;
+    height: 10px;
+    background: #999999;
+    border-radius: 50%;
+    margin-left: -5px;
+    float: left;
+    display: block;
+}
+
+.tagsdetails-timeline-content a {
+    width: 91%;
+    display: block;
+    margin-top: -10px;
+    color: #999999
+}
+

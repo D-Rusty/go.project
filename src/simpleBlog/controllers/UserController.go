@@ -6,8 +6,8 @@ import (
 	"time"
 	"fmt"
 	"path"
-	"github.com/russross/blackfriday"
 	"strings"
+	"github.com/russross/blackfriday"
 )
 
 type UserController struct {
@@ -43,7 +43,13 @@ func (c *UserController) Profile() {
 	for i := range as {
 
 		if len(as[i].Content) > 0 {
-			as[i].Content = string(blackfriday.MarkdownCommon([]byte(as[i].Content)))
+
+			if len(as[i].Content) > 200 {
+				as[i].Content = string(blackfriday.MarkdownCommon([]byte([]byte(as[i].Content)[:200])))
+			} else {
+				as[i].Content = string(blackfriday.MarkdownCommon([]byte(as[i].Content)))
+			}
+
 		}
 	}
 

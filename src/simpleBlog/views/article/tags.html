@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tags</title>
+{{template "head.html" .}}
+</head>
+<body class="body-article">
+<div class="body-article-wrapper">
+{{template "header.html" .}}
+    <div id="main" class="article-warp">
+    {{if .tags}}
+
+        <h1 class="tags-header">Tags</h1>
+        <h2 class="tags-header-total">{{.tagsToTal}}tags in total</h2>
+
+    {{range $index,$value := .tags}}
+        <div id="tagslist" class="tags-list">
+            <a href="/tags/list?tagsName={{$value.Name}}">{{$value.Name}}({{$value.ArticlesNum}})</a>
+        </div>
+    {{end}}
+    {{else}}
+            {{template "empty.html"}}
+        {{end}}
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        var obox = document.getElementById("tagslist")
+        var obj = obox.getElementsByTagName("a")
+
+        function rand(num) {
+            return parseInt(Math.random() * num + 1)
+        }
+
+        function randomcolor() {
+            return Math.floor(Math.random() * Math.pow(2, 24)).toString(16);
+        }
+
+        for (len = obj.length, i = len; i--;) {
+            obj[i].className = "color" + rand(5)
+            obj[i].style.fontSize = rand(12) + 12 + "px"
+            obj[i].style.color = "#" + randomcolor()
+            obj[i].style.borderBottomColor = "#" + randomcolor()
+
+        }
+    }
+</script>
+</body>
+</html>

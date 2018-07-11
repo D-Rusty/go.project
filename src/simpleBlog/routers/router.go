@@ -39,13 +39,18 @@ func init() {
 	beego.Router("/article/del/:id([0-9]+)", &controllers.ArticleController{}, `get:DelArticle`)
 	//编辑文章
 	beego.Router("/article/edit/:id([0-9]+)", &controllers.ArticleController{}, `get:EditArticle;post:SubmitEditArticle`)
-	//文章存档页面
-	beego.Router("/article/archive", &controllers.ArticleController{}, "get:Archive")
 	//创建评论
 	beego.Router("/create/reply", &controllers.ReplyController{}, `post:CreateReply`)
 
 	beego.Router("/file/imgupload", &controllers.UserController{}, "post:RegisterUserUpLoadImg")
 
 	beego.Router("/file/resetLogoImg", &controllers.UserController{}, "post:ResetUserLogoImg")
+
+	//查询Tags
+	beego.Router("/tags", &controllers.ArticleController{}, `get:GetTags`)
+
+	//查询Tags下文章
+	beego.Router("/tags/list", &controllers.ArticleController{}, `get:GetTagsArticles`)
+
 
 }

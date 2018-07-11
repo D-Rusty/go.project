@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tags</title>
+{{template "head.html" .}}
+    <style type="text/css">
+
+    </style>
+</head>
+<body class="body-article">
+<div class="body-article-wrapper">
+{{template "header.html" .}}
+
+    <div id="main" class="article-warp">
+
+        <span class="tagsdetails-header">
+            <p>{{$.tag.Name}}</p>
+            <h4>&nbsp;(Tag)</h4>
+        </span>
+
+        <div class="tagsdetails-timeline" id="timeline">
+        {{if $.tag}}
+            <ul>
+            {{range $index,$value := .tag.Articles}}
+                <li>
+                    <div class="tagsdetails-timeline-content">
+                        <view style=""></view>
+                        <a href="/article/{{$value.Id}}">&nbsp;&nbsp;&nbsp;&nbsp;{{$value.Title}}
+                        </a>
+                    </div>
+                </li>
+            {{end}}
+            </ul>
+        {{end}}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    window.onload = function () {
+
+        var obox = document.getElementById("timeline")
+
+        var obj = obox.getElementsByTagName("li")
+
+        obj[obj.length - 1].style.borderBottomColor = "#ffffff"
+    }
+</script>
+</body>
+</html>

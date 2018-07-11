@@ -23,6 +23,39 @@ func (c *ArticleController) OnCreateArticlePage() {
 }
 
 /**
+ * 创建Tags页面页面
+ */
+
+func (c *ArticleController) GetTags() {
+
+	tags, tagsTotal := class.Tag{}.GetAllTag()
+
+	c.Data["tags"] = tags
+	c.Data["tagsToTal"] = tagsTotal
+
+	c.TplName = "article/tags.html"
+}
+
+func (c *ArticleController) GetTagsArticles() {
+
+	tag := class.Tag{}.GetTagArticle(c.GetString("tagsName"))
+
+	fmt.Println(len(tag.Articles))
+
+	for i := range tag.Articles {
+		fmt.Println(tag.Articles[i].Title)
+	}
+
+	c.Data["tag"] = tag
+
+	c.TplName = "article/tagsdetails.html"
+}
+
+/**
+ * 获取tags列表
+ */
+
+/**
  * 提交新写好的文章到服务器
  */
 func (c *ArticleController) PostNewArtic() {
@@ -30,8 +63,6 @@ func (c *ArticleController) PostNewArtic() {
 	c.CheckLogin()
 
 	u := c.GetSession("user").(class.User)
-
-	println(c.GetString("content"))
 
 	a := &class.Article{
 		Title:   c.GetString("title"),
@@ -47,21 +78,6 @@ func (c *ArticleController) PostNewArtic() {
 		c.ret.Content = n
 		c.Data["json"] = c.ret
 		c.ServeJSON()
-
-		//
-		//tmpl := template.Must(template.New("article.html").Funcs(
-		//	template.FuncMap{"markDown": markDowner})
-		//.ParseFiles("article.html"))
-
-		//err := tmpl.ExecuteTemplate("index.html", n)
-		//
-		//if err != nil {
-		//	http.Error(w, err.Error(), http.StatusInternalServerError)
-		//}
-		//
-
-		//markDowner(n)
-
 		return
 	}
 
@@ -80,13 +96,11 @@ func (c *ArticleController) GetArticleDetails() {
 	a.QueryArticle()
 	a.Author.ReadDB()
 	a.Replys = class.Reply{Article: a}.QueryAllReply()
-	//"<div><p>地球你好</p><p>很好</p><p>欢迎来火星</div>"
 	c.Data["article"] = a
 	c.Data["replyTree"] = a.GetReplyTree()
 
 	body := string(blackfriday.MarkdownCommon([]byte(a.Content)))
 
-	fmt.Println(body)
 	c.Data["bodyContent"] = body
 	c.TplName = "article/article.html"
 }
@@ -175,51 +189,6 @@ func (c *ArticleController) SubmitEditArticle() {
 		c.ret.Ok = true
 		c.ret.Content = "编辑成功"
 	}
-
-}
-
-/**
- * 存档
- */
-func (c *ArticleController) Archive() {
-
-	errmsg := ""
-
-	a := class.Article{}
-
-	//获取文章包含的tag标签
-	if len(c.GetString("tag")) > 0 {
-		tag := class.Tag{Name: c.GetString("tag")}.Get()
-		if tag == nil {
-			errmsg += fmt.Sprintf("Tag[%s] is not exist.\n", c.GetString("tag"))
-		} else {
-			a.Tags = []*class.Tag{tag}
-		}
-	}
-
-	fmt.Println(len(a.Tags))
-
-	//获取文章的坐着信息
-	if len(c.GetString("author")) > 0 {
-		author := class.User{UId: c.GetString("author")}.Get()
-		if author == nil {
-			errmsg += fmt.Sprintf("User[%s] is not exist.\n", c.GetString("author"))
-		} else {
-			a.Author = author
-		}
-	}
-
-	fmt.Println(a.Author)
-
-	//获取该篇文章主要内容
-	if len(errmsg) == 0 {
-		rets := a.QueryFilterOptionsTagArticle()
-		c.Data["articles"] = rets
-	}
-
-	c.Data["err"] = errmsg
-
-	c.TplName = "article/archive.html"
 
 }
 

@@ -11,10 +11,9 @@
 
 {{template "header.html" .}}
 
+{{if.user}}
 {{if .articles}}
-
 {{range $index,$value := .articles}}
-
     <div id="main" class="article-warp">
 
         <header class="article-title">
@@ -48,6 +47,9 @@
     <!--空白页显示-->
 {{template "empty.html"}}
 {{end}}
+{{else}}
+     {{template "empty.html"}}
+            {{end}}
 
 
 </div>
