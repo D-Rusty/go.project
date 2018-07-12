@@ -31,23 +31,9 @@
 
 <script type="text/javascript">
 
-    // /**
-    //  * 发起登录
-    //  * */
-    // function submmitLogin() {
-    //     var tmp = ajaxSubmit($("#login_form"), function () {
-    //         alert(tmp.responseJSON)
-    //         if (tmp.responseJSON.success == true) {
-    //             alert("成功")
-    //             location.href = '/'
-    //         } else {
-    //             alert(tmp.responseJSON.content)
-    //         }
-    //     })
-    // }
-
-
-
+    /*
+     * 发起登录
+     * */
     $('#login_form').bind('submit', function () {
         var tmp = ajaxSubmit(this, function () {
             if (tmp.responseJSON.success == true) {
@@ -62,7 +48,7 @@
 
     /**
      * 去注册
-     */
+     **/
     function goRegister() {
 
         var oLoginBox = document.getElementById("login-box")

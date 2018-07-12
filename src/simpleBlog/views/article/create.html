@@ -3,20 +3,31 @@
     <title>New</title>
 {{template "head.html" .}}
 </head>
-<body class="body-article">
-<div class="body-article-wrapper">
+<body class="body">
+<div class="body-wrapper">
 {{template "header.html" .}}
-    <div id="main" class="article-warp">
+    <div id="editor" class="article-warp">
 
 
-        <div id="editor" class="article-create-input-preview">
-            <form method="post" action="/article/new">
-                <input class="article-create-title" name="title" placeholder="请输入文章标题...">
+        <form method="post" action="/article/new">
+
+            <input class="article-create-title" name="title" placeholder="请输入文章标题..." style="">
+
+
+            <div>
+                 <textarea class="article-create-input-content"
+                           name="content" :value="input" @input="update"></textarea>
+            </div>
+
+            <div class="article-create-input-preview">
+
+                <div v-html="compiledMarkdown" class="article-create-markdown_preview"></div>
+
                 <input type="submit" class="article-create-btn" value="">
-                <textarea class="article-create-input-content" name="content" :value="input" @input="update"></textarea>
-                <div v-html="compiledMarkdown" style="display: inline-block"></div>
-            </form>
-        </div>
+            </div>
+
+
+        </form>
 
     </div>
 

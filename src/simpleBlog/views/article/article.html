@@ -4,26 +4,24 @@
     <title>{{.article.Title}} - {{.article.Author.UserName}}</title>
 {{template "head.html" .}}
 </head>
-<body class="body-article">
-<div class="body-article-wrapper">
+<body class="body">
+<div class="body-wrapper">
 {{template "header.html" .}}
-
     <div id="main" class="article-warp">
 
-        <div class="container">
+        <header class="article-details-header">
 
-            <header class="article-title">
+            <div>
+                <a href="/article/{{.article.Id}}">{{.article.Title}}</a>
+            </div>
 
-                <h2>
-                    <a href="/article/{{.article.Id}}">{{.article.Title}}</a>
-                </h2>
 
-                <div class="article-details-title">
+            <div class="article-details-info">
                      <span>
                         <span>创建时间: </span>
                         <time title="Post created" datetime="2018-07-07">2018-07-07</time>
                     </span>
-                    <span>
+                <span>
                         <span class="article-button-divider">|</span>
                          <span>Author:</span>
                         <span>
@@ -32,34 +30,33 @@
                             </a>
                         </span>
                 </span>
-                </div>
+            </div>
 
-                <div class="article-details-tags">
-                    <!--标签-->
-                    <span>标签：</span>
-                {{range .article.Tags}}
-                    <a href="/tags/list?tagsName={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
-                {{end}}
-                </div>
+            <div class="article-details-tags">
+                <!--标签-->
+                <span>标签：</span>
+            {{range .article.Tags}}
+                <a href="/tags/list?tagsName={{.Name}}" class="btn btn-{{.RandColor}} btn-xs">{{.Name}}</a>
+            {{end}}
+            </div>
 
-                <div class="article-details-del-edit">
-                {{if $.user}}
-                {{if eq $.article.Author.UId $.user.UId}}
-                    <span>
+            <div class="article-details-del-edit">
+            {{if $.user}}
+            {{if eq $.article.Author.UId $.user.UId}}
+                <span>
                 <a href="/article/edit/{{$.article.Id}}">编辑</a> |
                 <a href="/article/del/{{$.article.Id}}">删除</a>
                 </span>
-                {{end}}
-                {{end}}
-                </div>
-
-            </header>
-
-            <div class="article-content" style="width: 91%;outline:none;margin-bottom: 60px;padding-bottom: 60px">
-
-            {{str2html .bodyContent}}
-
+            {{end}}
+            {{end}}
             </div>
+
+        </header>
+
+        <div class="article-content" style="width: 91%;outline:none;margin-bottom: 60px;padding-bottom: 60px">
+
+        {{str2html .bodyContent}}
+
         </div>
 
         <div id="container"></div>

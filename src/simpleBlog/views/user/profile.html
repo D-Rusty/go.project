@@ -5,9 +5,9 @@
     <meta cache>
 {{template "head.html"}}
 </head>
-<body class="body-profile">
+<body class="body">
 
-<div class="body-profile-wrapper">
+<div class="body-wrapper">
 
 {{template "header.html" .}}
 
@@ -17,29 +17,23 @@
     <div id="main" class="article-warp">
 
         <header class="article-title">
-            <h2>
-                <a href="/article/{{$value.Id}}">{{$value.Title}}</a>
-            </h2>
+            <a href="/article/{{$value.Id}}">{{$value.Title}}</a>
         </header>
 
         <span class="article-content">{{str2html $value.Content}}<br></span>
 
-        <div class="article-button">
+        <div class="article-panel">
 
             <span>createTime: </span>
             <time title="Post created" datetime="2018-07-07">{{$value.Time}}</time>
-            </span>
-            <span class="article-button-divider">|</span>
+            <span class="article-panel-divider">|</span>
             <span>Author:</span>
-            <span>
-                   <a href="" rel="index">
-                       <span>{{$value.Author.UserName}}</span>
-                   </a>
-               </span>
-            </span>
-            <span class="article-button-divider">|</span>
+            <span><a href="" rel="index">
+                                <span>{{$value.Author.UserName}}</span>
+                              </a>
+                        </span>
+            <span class="article-panel-divider">|</span>
             <a class="readmore" href="/article/{{$value.Id}}">Read more »</a>
-
         </div>
     </div>
 {{end}}
@@ -48,10 +42,9 @@
 {{template "empty.html"}}
 {{end}}
 {{else}}
-     {{template "empty.html"}}
-            {{end}}
-
-
+    {{template "empty.html"}}
+{{end}}
+</div>
 </div>
 
 <div id="over" class="over"></div>
