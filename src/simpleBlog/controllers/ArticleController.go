@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"html/template"
 	"github.com/russross/blackfriday"
 )
 
@@ -23,44 +22,42 @@ func (c *ArticleController) OnCreateArticlePage() {
 }
 
 /**
- * 创建Tags页面页面
+ * 获取该用户下所有文章标签列表
  */
-
 func (c *ArticleController) GetTags() {
 
 	tags, tagsTotal := class.Tag{}.GetAllTag()
 
+	//标签数组
 	c.Data["tags"] = tags
+	//标签总数
 	c.Data["tagsToTal"] = tagsTotal
 
 	c.TplName = "article/tags.html"
+
 }
 
+/**
+ * 获取指定标签下面文章列表
+ */
 func (c *ArticleController) GetTagsArticles() {
 
-	tag := class.Tag{}.GetTagArticle(c.GetString("tagsName"))
-
-	fmt.Println(len(tag.Articles))
-
-	for i := range tag.Articles {
-		fmt.Println(tag.Articles[i].Title)
-	}
-
-	c.Data["tag"] = tag
+	c.Data["tag"] = class.Tag{}.GetTagArticle(c.GetString("tagsName"))
 
 	c.TplName = "article/tagsdetails.html"
 }
 
 /**
- * 获取tags列表
- */
-
-/**
- * 提交新写好的文章到服务器
+ * 提交新写好的文章
  */
 func (c *ArticleController) PostNewArtic() {
 
 	c.CheckLogin()
+
+	defer func() {
+		c.Data["json"] = c.ret
+		c.ServeJSON()
+	}()
 
 	u := c.GetSession("user").(class.User)
 
@@ -76,32 +73,33 @@ func (c *ArticleController) PostNewArtic() {
 	if err == nil {
 		c.ret.Ok = true
 		c.ret.Content = n
-		c.Data["json"] = c.ret
-		c.ServeJSON()
-		return
+	} else {
+		c.ret.Ok = false
+		c.ret.Content = fmt.Sprint(err)
 	}
 
-	c.ret.Ok = false
-	c.ret.Content = fmt.Sprint(err)
-	c.Data["json"] = c.ret
-	c.ServeJSON()
 }
 
 /**
  * 获取文章详细内容
  */
 func (c *ArticleController) GetArticleDetails() {
+
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+
 	a := &class.Article{Id: id}
+
+	//查询该文章id下对应的文章记录
 	a.QueryArticle()
-	a.Author.ReadDB()
-	a.Replys = class.Reply{Article: a}.QueryAllReply()
+	//查询该篇文章作者信息
+	a.Author.Query()
+
 	c.Data["article"] = a
-	c.Data["replyTree"] = a.GetReplyTree()
 
 	body := string(blackfriday.MarkdownCommon([]byte(a.Content)))
 
 	c.Data["bodyContent"] = body
+
 	c.TplName = "article/article.html"
 }
 
@@ -109,22 +107,29 @@ func (c *ArticleController) GetArticleDetails() {
  * 删除文章
  */
 func (c *ArticleController) DelArticle() {
+
+	//检查用户是否登录
 	c.CheckLogin()
+	//获取当前登录用户对象
 	u := c.GetSession("user").(class.User)
 
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 
 	a := &class.Article{Id: id}
+	//查询该篇文章对应的数据库信息
 	a.QueryArticle()
 
+	//如果当前登录用户信息和文章用户信息不一致，则强制退出登录
 	if u.UId != a.Author.UId {
 		c.DoLogout()
 	}
 
+	//将文章状态改为隐藏
 	a.Defunct = true
+	//更新文章数据库信息
 	a.Update()
-
-	c.Redirect("/user/"+a.Author.UId, 302)
+	//重定向到当前登录用户主页
+	c.Redirect("/user/"+u.UId, 302)
 }
 
 /**
@@ -134,21 +139,17 @@ func (c *ArticleController) EditArticle() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	a := &class.Article{Id: id}
 	a.QueryArticle()
-	a.Author.ReadDB()
+	a.Author.Query()
 	c.Data["article"] = a
 	c.TplName = "article/create.html"
 }
 
 /**
- *文章编辑页面后结果在提交
+ *文章编辑页面结果提交
  */
-
 func (c *ArticleController) SubmitEditArticle() {
 
 	c.CheckLogin()
-
-	c.ret.Ok = false
-	c.ret.Content = "编辑失败"
 
 	defer func() {
 		c.Data["json"] = c.ret
@@ -163,7 +164,7 @@ func (c *ArticleController) SubmitEditArticle() {
 
 	a.QueryArticle()
 
-	if u.UserName != a.Author.UserName {
+	if u.UId != a.Author.UId {
 		c.DoLogout()
 	}
 
@@ -188,11 +189,9 @@ func (c *ArticleController) SubmitEditArticle() {
 	if err == nil {
 		c.ret.Ok = true
 		c.ret.Content = "编辑成功"
+	} else {
+		c.ret.Ok = false
+		c.ret.Content = "编辑失败"
 	}
 
-}
-
-func markDowner(args ...interface{}) template.HTML {
-	s := blackfriday.MarkdownCommon([]byte(fmt.Sprintf("%s", args...)))
-	return template.HTML(s)
 }

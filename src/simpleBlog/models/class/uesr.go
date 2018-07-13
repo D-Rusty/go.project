@@ -22,22 +22,13 @@ type User struct {
 	About      string    `orm:"null"`         //兴趣爱好
 	Email      string    `orm:"unique"`       //邮箱地址
 	Password   string                         //登录密码
-	PostNum    int                            //文章数量
-	TagNum     int                            //标签数量
 	RegTime    time.Time `orm:"auto_now_add"` //用户注册时间
 }
 
-const (
-	PR_live  = iota
-	PR_login
-	PR_post
-)
-
-const (
-	DefaultPvt = 1<<3 - 1
-)
-
-func (u User) CreateDB() (err error) {
+/**
+ * 插入一条用户记录
+ */
+func (u User) Insert() (err error) {
 	o := orm.NewOrm()
 	_, err = o.Insert(&u)
 	return
@@ -55,46 +46,44 @@ func InitData() {
 		About:      "爬山，游泳",
 		Email:      "onepice2014@sina.com",
 		Password:   PwGen("123456"),
-		PostNum:    0,
-		TagNum:     0,
 		RegTime:    time.Now(),
 	}
 
-	if u.ReadDB() != nil {
-		u.CreateDB()
+	if u.Query() != nil {
+		u.Insert()
 	}
 
 }
 
-func (u *User) ReadDB() (err error) {
+/**
+ * 查询用户信息
+ */
+func (u *User) Query() (err error) {
 	o := orm.NewOrm()
 	err = o.Read(u)
 	return
 }
 
-func (u User) Get() *User {
-	fmt.Println("Get")
-	o := orm.NewOrm()
-	err := o.Read(&u)
-	if err == orm.ErrNoRows {
-		return nil
-	}
-	return &u
-}
-
+/**
+ *更新指定用户信息
+ */
 func (u User) Update() (err error) {
-	fmt.Println("Update")
 	o := orm.NewOrm()
 	_, err = o.Update(&u)
 	return
 }
 
+/**
+ * 删除用户记录
+ */
 func (u User) Delete() (err error) {
-	fmt.Println("Delete")
 	err = u.Update()
 	return
 }
 
+/**
+ * 判断该用户是否已经存在
+ */
 func (u User) ExistId() bool {
 	o := orm.NewOrm()
 	if err := o.Read(&u); err == orm.ErrNoRows {
@@ -103,6 +92,9 @@ func (u User) ExistId() bool {
 	return true
 }
 
+/**
+ * 判断该邮箱是否已经注册
+ */
 func (u User) ExistEmail() bool {
 	o := orm.NewOrm()
 	return o.QueryTable("user").Filter("Email", u.Email).Exist()
@@ -111,7 +103,6 @@ func (u User) ExistEmail() bool {
 /*
  * 生成随机用户id
  */
-
 func GenerateRandomUserId() string {
 	return strconv.FormatInt(time.Now().UnixNano()%9000+1000, 10)
 }

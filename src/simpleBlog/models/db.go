@@ -29,7 +29,7 @@ func init() {
 
 	}
 
-	orm.RegisterModel(new(class.User), new(class.Article), new(class.Tag), new(class.Reply))
+	orm.RegisterModel(new(class.User), new(class.Article), new(class.Tag))
 
 	orm.RunSyncdb("default", false, true)
 }

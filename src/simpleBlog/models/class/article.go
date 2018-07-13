@@ -7,6 +7,10 @@ import (
 )
 
 //关于模型的定义请参考:https://beego.me/docs/mvc/model/models.md
+
+/**
+ * 文章列表
+ */
 type Article struct {
 	Id      int
 	Title   string `orm:"size(80)"`
@@ -14,15 +18,12 @@ type Article struct {
 
 	Author *User `orm:"rel(fk)"` //多篇文章对应一个作者
 
-	NumReplys int //评论数量
-
-	Replys []*Reply `orm:"-"` //忽略评论字段
 	//文章与标签之间设置多对多关系,一篇文章对应多个标签，一个标签对应多篇文章
 	Tags []*Tag `orm:"rel(m2m)"`
 	//auto_now_add 第一次保存时才设置时间
 	Time time.Time `orm:"auto_now_add;type(datetime)"`
 
-	Defunct bool
+	Defunct bool //为true是文章为不可公布状态，false为正在公布状态
 }
 
 /**
@@ -37,7 +38,7 @@ func (a Article) Insert() (n int64, err error) {
 }
 
 /**
- * 更新文章内容已经，文章对应的tag
+ * 更新文章内容以及，文章对应的tag
  */
 func (a Article) Update() (err error) {
 
@@ -194,32 +195,4 @@ func (a Article) QueryAllArticle() (rets []Article) {
 
 	return
 
-}
-
-/**
- * 生成评论树形结构
- */
-func (a *Article) GetReplyTree() (rets [] *ReplyTree) {
-
-	replys := Reply{Article: a}.QueryAllReply()
-
-	m := make(map[int]*ReplyTree)
-
-	for _, reply := range replys {
-
-		tr := &ReplyTree{
-			Reply:  reply,
-			Childs: make([]*ReplyTree, 0),
-		}
-
-		m[tr.Id] = tr
-
-		if reply.ParentId == 0 {
-			rets = append(rets, tr)
-		} else {
-			m[reply.ParentId].Childs = append(m[reply.ParentId].Childs, tr)
-		}
-	}
-
-	return
 }

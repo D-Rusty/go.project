@@ -9,26 +9,22 @@ func init() {
 	//用户管理
 	//首页
 	beego.Router("/", &controllers.UserController{}, `get:Profile`)
-
-	//上传头像
-
 	//用户登录
-	beego.Router("/login", &controllers.UserController{}, `get:LoginPage;post:Login`)
+	beego.Router("/login", &controllers.UserController{}, `post:Login`)
 	//用户注册
-	beego.Router("/register", &controllers.UserController{}, `get:RegisterPage;post:Register`)
+	beego.Router("/register", &controllers.UserController{}, `post:Register`)
 	//退出登录
 	beego.Router("/logout", &controllers.UserController{}, `get:Logout`)
 	//获取设置页面
 	beego.Router("/setting", &controllers.UserController{}, `get:UserSetting`)
-
 	//用户信息设置
 	beego.Router("/settinginfo", &controllers.UserController{}, `post:SettingInfo`)
-
 	//用户密码设置
 	beego.Router("/settingpwd", &controllers.UserController{}, `post:SettingPwd`)
-
 	//个人主页
 	beego.Router("/user/:username", &controllers.UserController{}, `get:Profile`)
+	//上传或替换用户头像
+	beego.Router("/file/resetLogoImg", &controllers.UserController{}, "post:ResetUserLogoImg")
 
 	//文章管理
 	//新建文章
@@ -39,18 +35,11 @@ func init() {
 	beego.Router("/article/del/:id([0-9]+)", &controllers.ArticleController{}, `get:DelArticle`)
 	//编辑文章
 	beego.Router("/article/edit/:id([0-9]+)", &controllers.ArticleController{}, `get:EditArticle;post:SubmitEditArticle`)
-	//创建评论
-	beego.Router("/create/reply", &controllers.ReplyController{}, `post:CreateReply`)
 
-	beego.Router("/file/imgupload", &controllers.UserController{}, "post:RegisterUserUpLoadImg")
-
-	beego.Router("/file/resetLogoImg", &controllers.UserController{}, "post:ResetUserLogoImg")
-
+	//标签管理
 	//查询Tags
 	beego.Router("/tags", &controllers.ArticleController{}, `get:GetTags`)
-
 	//查询Tags下文章
 	beego.Router("/tags/list", &controllers.ArticleController{}, `get:GetTagsArticles`)
-
 
 }

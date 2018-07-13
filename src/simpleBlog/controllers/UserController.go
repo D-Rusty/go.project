@@ -23,9 +23,8 @@ var user = class.User{}
 const qiuNiuUrl = "http://pax6k3826.bkt.clouddn.com/"
 
 /**
- * 个人主页
+ * 加载个人主页数据
  */
-
 func (c *UserController) Profile() {
 
 	//获取来自页面的用户id
@@ -33,7 +32,7 @@ func (c *UserController) Profile() {
 	//已经登录账户的访问加载对应id的
 	user.UserName = username
 	//通过数据库查询该用户信息
-	user.ReadDB()
+	user.Query()
 	//将查询到的用户信息，存储到map中
 	c.Data["u"] = user
 	//查询和该用户相关的文章
@@ -64,20 +63,6 @@ func (c *UserController) Profile() {
 }
 
 /**
- * 未登录前主页
- */
-func (c *UserController) UnLoginHomePage() {
-	c.TplName = "user/homepage.html"
-}
-
-/**
- * 注册页面
- */
-func (c *UserController) RegisterPage() {
-	c.TplName = "user/register.html"
-}
-
-/**
  * 用户注册
  */
 func (c *UserController) Register() {
@@ -89,6 +74,7 @@ func (c *UserController) Register() {
 
 	username := c.GetString("username")
 	describe := c.GetString("describe")
+
 	email := c.GetString("email")
 	pwd1 := c.GetString("password")
 	pwd2 := c.GetString("password2")
@@ -128,10 +114,6 @@ func (c *UserController) Register() {
 		user.Email = email
 		user.Password = class.PwGen(pwd1)
 
-		user.PostNum = 0
-
-		user.TagNum = 0
-
 		user.RegTime = time.Now()
 
 		switch {
@@ -140,7 +122,7 @@ func (c *UserController) Register() {
 		case user.ExistEmail():
 			valid.Error("邮箱被占用")
 		default:
-			err := user.CreateDB()
+			err := user.Insert()
 			if err == nil {
 				c.DoLogin(user)
 				c.ret.Ok = true
@@ -165,7 +147,6 @@ func (c *UserController) Register() {
  * 用户设置
  */
 func (c *UserController) UserSetting() {
-	//检查用户是否已经登录
 	c.CheckLogin()
 	c.TplName = "user/setting.html"
 }
@@ -175,7 +156,6 @@ func (c *UserController) UserSetting() {
  */
 func (c *UserController) Setting() {
 	c.CheckLogin()
-
 	switch c.GetString("do") {
 	case "info":
 		c.SettingInfo()
@@ -186,24 +166,12 @@ func (c *UserController) Setting() {
 }
 
 /**
- * 登录页面
- */
-func (c *UserController) LoginPage() {
-	c.TplName = "user/login.html"
-}
-
-/**
  * 用户登录
  */
 func (c *UserController) Login() {
 
-	ret := RET{
-		Ok:      true,
-		Content: "success",
-	}
-
 	defer func() {
-		c.Data["json"] = ret
+		c.Data["json"] = c.ret
 		c.ServeJSON()
 	}()
 
@@ -219,19 +187,19 @@ func (c *UserController) Login() {
 
 	switch {
 	case valid.HasErrors():
-	case u.ReadDB() != nil:
+	case u.Query() != nil:
 		valid.Error("用户不存在")
 	case class.PwCheck(pwd, u.Password) == false:
 		valid.Error("密码错误")
 	default:
 		c.DoLogin(*u)
-		ret.Ok = true
-		ret.Content = u.UserName
+		c.ret.Ok = true
+		c.ret.Content = u.UserName
 		return
 	}
 
-	ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
-	ret.Ok = false
+	c.ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
+	c.ret.Ok = false
 	return
 }
 
@@ -316,47 +284,9 @@ func (c *UserController) SettingPwd() {
 }
 
 /**
-* 注册上传用户头像
-*/
-func (c *UserController) RegisterUserUpLoadImg() {
-
-	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
-
-	filename := h.Filename
-
-	f.Close() //关闭上传的文件，不然的话会出现临时文件不能清除的情况
-
-	c.SaveToFile("imgFiles", path.Join("static/img", filename))
-
-	err := class.SimeUploadFile(filename)
-
-	if err == nil {
-		//图片上传成功
-		img := filename
-
-		c.Data["img"] = qiuNiuUrl + img
-
-		c.TplName = "user/register.html"
-
-		user.LogoImgUrl = img
-
-	} else {
-		fmt.Println(err)
-		c.ret.Ok = false
-		c.ret.Content = err
-		c.Data["json"] = c.ret
-		c.ServeJSON()
-	}
-
-}
-
-/**
- * 替换头像
+ * 替换或上传头像
  */
-
 func (c *UserController) ResetUserLogoImg() {
-
-	println("sdsfsffs")
 
 	f, h, _ := c.GetFile("imgFiles") //获取上传的文件
 
